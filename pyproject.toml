@@ -7,11 +7,7 @@ requires-python = ">=3.10,<3.11"
 dependencies = ["cpg-flow", "cpg-utils>=5.1.1"]
 
 [tool.uv]
-dev-dependencies = [
-    "black>=24.10.0",
-    "pip-audit>=2.7.3",
-    "pre-commit>=4.0.1",
-]
+dev-dependencies = ["black>=24.10.0", "pip-audit>=2.7.3", "pre-commit>=4.0.1"]
 
 [tool.uv.sources]
 cpg-flow = { git = "https://github.com/populationgenomics/cpg-flow", rev = "58a713f25b3c4f6f7cd7be7ad59df2a1681e3029" }
@@ -251,29 +247,4 @@ ignore = [
     "SIM212",
     "DTZ002",
     "UP007",
-]
-
-[tool.ruff.lint.isort]
-
-section-order = [
-    "future",
-    "standard-library",
-    "third-party",
-    "hail",
-    "cpg",
-    "first-party",
-    "local-folder",
-]
-
-[tool.ruff.lint.isort.sections]
-hail = ["hail", "hailtop"]
-
-cpg = [
-    "analysis_runner",
-    "cpg_infra",
-    "cpg_utils",
-    "cpg_flow",
-    "gnomad",
-    "hail_scripts",
-    "metamist",
 ]
