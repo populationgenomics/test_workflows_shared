@@ -1,0 +1,34 @@
+name: Lint
+on:
+  push:
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: 'true'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          version: '0.4.4'
+          enable-cache: true
+
+      - name: Install Python
+        run: uv python install
+
+      - name: Install pre-commit from dev dependencies
+        run: uv sync --only-dev
+
+      - name: Install pre-commit hooks
+        run: uv run pre-commit install --install-hooks
+
+      - name: Run pre-commit
+        run: uv run pre-commit run --all-files

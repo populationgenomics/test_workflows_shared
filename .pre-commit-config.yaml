@@ -1,0 +1,51 @@
+default_language_version:
+  python: python3.10
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-yaml
+        exclude: '\.*conda/.*'
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+        exclude: '\.txt$|\.tsv$'
+      - id: check-case-conflict
+      - id: check-merge-conflict
+      - id: detect-private-key
+      - id: debug-statements
+      - id: check-added-large-files
+
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.42.0
+    hooks:
+      - id: markdownlint
+        args: [-s, .markdownlint.json]
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    # Ruff version.
+    rev: v0.7.3
+    hooks:
+      - id: ruff
+        name: ruff (format)
+        args: [--fix]
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.13.0
+    hooks:
+      - id: mypy
+        args:
+          [
+            --pretty,
+            --show-error-codes,
+            --no-strict-optional,
+            --ignore-missing-imports,
+            --install-types,
+            --non-interactive,
+          ]
+        additional_dependencies: [types-PyYAML==6.0.4, types-toml]
+
+  - repo: https://github.com/opensource-nepal/commitlint
+    rev: v1.3.0
+    hooks:
+      - id: commitlint
+        stages: [commit-msg]
