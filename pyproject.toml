@@ -14,7 +14,7 @@ dev-dependencies = [
 ]
 
 [tool.uv.sources]
-cpg-flow = { git = "https://github.com/populationgenomics/cpg-flow", rev = "58a713f25b3c4f6f7cd7be7ad59df2a1681e3029" }
+cpg-flow = { git = "https://github.com/populationgenomics/cpg-flow", rev = "637c523f1a33658a8449a65ff56349c101afb312" }
 
 [project.urls]
 Repository = "https://github.com/populationgenomics/cpg-flow"
