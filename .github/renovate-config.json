@@ -1,0 +1,40 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "onboarding": true,
+    "requireConfig": "ignored",
+    "platform": "github",
+    "repositories": ["populationgenomics/test_workflows_shared"],
+    "prConcurrentLimit": 10,
+    "prHourlyLimit": 5,
+    "semanticCommits": "enabled",
+    "enabledManagers": ["pep621"],
+    "constraints": {
+      "python": "==3.10"
+    },
+    "pep621": {
+      "lockFileMaintenance": {
+        "enabled": true
+      }
+    },
+    "packageRules": [
+      {
+        "groupName": "all non-major dependencies",
+        "groupSlug": "all-minor-patch",
+        "matchUpdateTypes": [
+          "minor",
+          "patch"
+        ],
+        "matchPackagePatterns": ["*"],
+        "minimumReleaseAge": "48 hours"
+      },
+      {
+        "groupName": "all major dependencies",
+        "groupSlug": "all-major",
+        "matchUpdateTypes": [
+          "major"
+        ],
+        "matchPackagePatterns": ["*"],
+        "minimumReleaseAge": "48 hours"
+      }
+    ]
+  }
