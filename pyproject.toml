@@ -4,13 +4,14 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10,<3.11"
-dependencies = ["cpg-flow", "cpg-utils>=5.1.1"]
+dependencies = [
+ "cpg-utils>=5.1.1",
+]
 
 [tool.uv]
 dev-dependencies = ["black>=24.10.0", "pip-audit>=2.7.3", "pre-commit>=4.0.1"]
 
 [tool.uv.sources]
-cpg-flow = { git = "https://github.com/populationgenomics/cpg-flow", rev = "58a713f25b3c4f6f7cd7be7ad59df2a1681e3029" }
 
 [project.urls]
 Repository = "https://github.com/populationgenomics/cpg-flow"
