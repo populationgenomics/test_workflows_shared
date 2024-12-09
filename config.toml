@@ -1,12 +1,12 @@
 [workflow]
 dataset = 'fewgenomes'
-input_cohorts = ['COH2142']
+input_cohorts = ['COH2217']
 access_level = 'test'
 
 # Force stage rerun
 force_stages = [
     'GeneratePrimes',
-    'CumulativeCalc',
+    # 'CumulativeCalc',
     # 'FilterEvens',
     # 'BuildAPrimePyramid',
 ]

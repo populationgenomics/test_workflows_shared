@@ -42,7 +42,7 @@ repos:
             --install-types,
             --non-interactive,
           ]
-        additional_dependencies: [types-PyYAML==6.0.4, types-toml]
+        additional_dependencies: [mypy, types-PyYAML==6.0.4, types-toml]
 
   - repo: https://github.com/opensource-nepal/commitlint
     rev: v1.3.0

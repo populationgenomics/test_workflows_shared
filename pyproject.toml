@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.10,<3.11"
 dependencies = [
  "cpg-utils>=5.1.1",
+ "hail>=0.2.133",
 ]
 
 [tool.uv]

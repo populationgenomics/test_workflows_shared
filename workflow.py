@@ -6,6 +6,8 @@ from pathlib import Path
 from cpg_flow.workflow import run_workflow
 from cpg_utils.config import set_config_paths
 
+from stages import GeneratePrimes
+
 TMP_DIR = os.getenv('TMP_DIR')
 CONFIG_FILE = str(Path(__file__).parent / 'config.toml')
 
@@ -13,9 +15,7 @@ message = "Hello, Hail Batch! I'm CPG flow, nice to meet you."
 
 
 def run_cpg_flow(dry_run=False):
-    from stages import CumulativeCalc, GeneratePrimes
-
-    workflow = [GeneratePrimes, CumulativeCalc]
+    workflow = [GeneratePrimes]
 
     config_paths = os.environ['CPG_CONFIG_PATH'].split(',')
 
