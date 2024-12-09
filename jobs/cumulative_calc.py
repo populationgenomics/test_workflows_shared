@@ -27,6 +27,6 @@ def cumulative_calc(
 
     print('-----PRINT PRIMES-----')
     print(output_file_path)
-    b.write_output(job.primes, output_file_path)
+    b.write_output(job.cumulative, output_file_path)
 
     return job
