@@ -1,7 +1,7 @@
 import json
 
 from cpg_flow.stage import CohortStage, DatasetStage, SequencingGroupStage, StageInput, StageOutput, stage
-from cpg_flow.targets.dataset import Dataset
+from cpg_flow.targets.cohort import Cohort
 from cpg_flow.targets.sequencing_group import SequencingGroup
 from cpg_utils import Path
 from cpg_utils.hail_batch import get_batch
@@ -96,24 +96,24 @@ class CumulativeCalc(SequencingGroupStage):
 
 
 @stage(required_stages=[CumulativeCalc], analysis_keys=['no_evens'], analysis_type='prime_pyramid')
-class FilterEvens(DatasetStage):
-    def expected_outputs(self, dataset: Dataset):
+class FilterEvens(CohortStage):
+    def expected_outputs(self, cohort: Cohort):
         return {
-            'no_evens': dataset.prefix() / f'{dataset.name}_no_evens.txt',
+            'no_evens': cohort.analysis_dataset.prefix() / f'{cohort.name}_no_evens.txt',
         }
 
-    def queue_jobs(self, dataset: Dataset, inputs: StageInput) -> StageOutput | None:
+    def queue_jobs(self, cohort: Cohort, inputs: StageInput) -> StageOutput | None:
         b = get_batch()
 
         jobs = []
-        for sg in dataset.get_sequencing_groups():
+        no_evens_output_path = str(self.expected_outputs(cohort).get('no_evens', ''))
+        for sg in cohort.get_sequencing_groups():
             input_json = inputs.as_path(sg, CumulativeCalc, 'cumulative')
-            no_evens_output_path = str(self.expected_outputs(sg).get('no_evens', ''))
             jobs.append(filter_evens(b, sg, input_json, no_evens_output_path))
 
         return self.make_outputs(
-            dataset,
-            data=self.expected_outputs(dataset).get('no_evens'),
+            cohort,
+            data=self.expected_outputs(cohort).get('no_evens'),
             jobs=jobs,
         )
 
