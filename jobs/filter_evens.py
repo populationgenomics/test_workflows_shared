@@ -5,6 +5,7 @@ from hailtop.batch.job import Job
 
 def filter_evens(
     b: Batch,
+    sequencing_group: SequencingGroup,
     input_file_path: str,
     output_file_path: str,
 ) -> list[Job]:
@@ -20,7 +21,7 @@ def filter_evens(
             result+=("$num")
         fi
     done
-    echo "${{result[@]}}" > {job.no_evens}
+    echo "{sequencing_group.id}: ${{result[@]}}" >> {job.no_evens}
     """
 
     job.command(cmd)

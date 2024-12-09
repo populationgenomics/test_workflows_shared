@@ -1,6 +1,7 @@
 import json
 
 from cpg_flow.stage import CohortStage, DatasetStage, SequencingGroupStage, StageInput, StageOutput, stage
+from cpg_flow.targets.dataset import Dataset
 from cpg_flow.targets.sequencing_group import SequencingGroup
 from cpg_utils import Path
 from cpg_utils.hail_batch import get_batch
@@ -46,7 +47,7 @@ This task is simple, yet it combines loops, conditionals, and basic data manipul
 """
 
 
-@stage
+@stage(analysis_keys=['id_sum', 'primes'], analysis_type='prime_pyramid')
 class GeneratePrimes(SequencingGroupStage):
     def expected_outputs(self, sequencing_group: SequencingGroup) -> dict[str, Path | str]:
         return {
@@ -71,9 +72,7 @@ class GeneratePrimes(SequencingGroupStage):
         return self.make_outputs(sequencing_group, data=self.expected_outputs(sequencing_group), jobs=jobs)  # type: ignore
 
 
-@stage(
-    required_stages=[GeneratePrimes],
-)
+@stage(required_stages=[GeneratePrimes], analysis_keys=['cumulative'], analysis_type='prime_pyramid')
 class CumulativeCalc(SequencingGroupStage):
     def expected_outputs(self, sequencing_group: SequencingGroup):
         return {
@@ -96,32 +95,30 @@ class CumulativeCalc(SequencingGroupStage):
         )
 
 
-@stage(required_stages=[CumulativeCalc])
+@stage(required_stages=[CumulativeCalc], analysis_keys=['no_evens'], analysis_type='prime_pyramid')
 class FilterEvens(DatasetStage):
-    def expected_outputs(self, sequencing_group: SequencingGroup):
+    def expected_outputs(self, dataset: Dataset):
         return {
-            'no_evens': sequencing_group.dataset.prefix() / f'{sequencing_group.id}_no_evens.json',
+            'no_evens': dataset.prefix() / f'{dataset.name}_no_evens.txt',
         }
 
-    def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput | None:
-        input_json = inputs.as_path(sequencing_group, CumulativeCalc, 'cumulative')
+    def queue_jobs(self, dataset: Dataset, inputs: StageInput) -> StageOutput | None:
         b = get_batch()
 
-        no_evens_output_path = str(self.expected_outputs(sequencing_group).get('no_evens', ''))
-        job_no_evens = filter_evens(b, input_json, no_evens_output_path)
-
-        jobs = [job_no_evens]
+        jobs = []
+        for sg in dataset.get_sequencing_groups():
+            input_json = inputs.as_path(sg, CumulativeCalc, 'cumulative')
+            no_evens_output_path = str(self.expected_outputs(sg).get('no_evens', ''))
+            jobs.append(filter_evens(b, sg, input_json, no_evens_output_path))
 
         return self.make_outputs(
-            sequencing_group,
-            data=self.expected_outputs(sequencing_group).get('no_evens'),
+            dataset,
+            data=self.expected_outputs(dataset).get('no_evens'),
             jobs=jobs,
         )
 
 
-@stage(
-    required_stages=[GeneratePrimes, FilterEvens],
-)
+@stage(required_stages=[GeneratePrimes, FilterEvens], analysis_keys=['pyramid'], analysis_type='prime_pyramid')
 class BuildAPrimePyramid(CohortStage):
     def expected_outputs(self, sequencing_group: SequencingGroup):
         return {
