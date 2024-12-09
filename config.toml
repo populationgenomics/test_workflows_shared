@@ -1,6 +1,6 @@
 [workflow]
 dataset = 'fewgenomes'
-input_cohorts = ['COH2217']
+input_cohorts = ['COH2142']
 access_level = 'test'
 
 # Force stage rerun
