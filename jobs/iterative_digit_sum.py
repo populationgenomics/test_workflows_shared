@@ -30,8 +30,10 @@ def iterative_digit_sum(
         # Extract digits from the alphanumeric string and calculate digit sum
         extract_digits_and_sum() {{
         local input_string=$1
-        local digits=$(echo "$input_string" | grep -oE '\d')
+        local digits=$(echo "$input_string" | grep -oE '[0-9]+')
+        echo "Digits: $digits"
         local concatenated_digits=$(echo "$digits" | tr -d '\n')
+        echo "Concatenated digits: $concatenated_digits"
 
         if [ -z "$concatenated_digits" ]; then
             echo "No digits in input string"
