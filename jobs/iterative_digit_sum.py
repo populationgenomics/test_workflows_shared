@@ -44,7 +44,9 @@ def iterative_digit_sum(
 
         # Example usage
         # Replace "$1" with your actual input
-        extract_digits_and_sum {sequencing_group.id} > {job.id_sum}
+        result=$(extract_digits_and_sum {sequencing_group.id})
+        echo $result
+        echo $result > {job.id_sum}
     """
     job.command(cmd)
 
