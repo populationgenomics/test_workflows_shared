@@ -1,2 +1,2 @@
-from first_n_primes import first_n_primes
-from iterative_digit_sum import iterative_digit_sum
+from jobs.first_n_primes import first_n_primes
+from jobs.iterative_digit_sum import iterative_digit_sum
