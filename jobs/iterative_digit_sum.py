@@ -31,12 +31,10 @@ def iterative_digit_sum(
         extract_digits_and_sum() {{
         local input_string=$1
         local digits=$(echo "$input_string" | grep -oE '[0-9]+')
-        echo "Digits: $digits"
         local concatenated_digits=$(echo "$digits" | tr -d '\n')
-        echo "Concatenated digits: $concatenated_digits"
 
         if [ -z "$concatenated_digits" ]; then
-            echo "No digits in input string"
+            echo "No digits in input string"  >&2  # Redirect to stderr
             return
         fi
 
@@ -46,9 +44,9 @@ def iterative_digit_sum(
 
         # Example usage
         # Replace "$1" with your actual input
-        echo "Input: {sequencing_group.id}"
+        echo "Input: {sequencing_group.id}\n"
         result=$(extract_digits_and_sum {sequencing_group.id})
-        echo $result
+        echo "Result: $result\n"
         echo $result > {job.id_sum}
     """
     job.command(cmd)
