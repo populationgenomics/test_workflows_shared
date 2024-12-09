@@ -5,7 +5,7 @@ from cpg_flow.targets.sequencing_group import SequencingGroup
 from cpg_utils import Path
 from cpg_utils.hail_batch import get_batch
 
-from jobs import cumulative_calc, first_n_primes, iterative_digit_sum
+from jobs import cumulative_calc, filter_evens, first_n_primes, iterative_digit_sum
 
 """
 Here's a fun programming task with four interdependent steps, using the concept of **prime numbers** and their relationships:
@@ -82,8 +82,6 @@ class CumulativeCalc(SequencingGroupStage):
 
     def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput | None:
         input_json = inputs.as_path(sequencing_group, GeneratePrimes, 'primes')
-        print('-----PRINT INPUT JSON-----')
-        print(input_json)
         b = get_batch()
 
         cumulative_calc_output_path = str(self.expected_outputs(sequencing_group).get('cumulative', ''))
@@ -107,25 +105,18 @@ class FilterEvens(DatasetStage):
 
     def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput | None:
         input_json = inputs.as_path(sequencing_group, CumulativeCalc, 'cumulative')
-        cumulative_primes = json.load(open(input_json))
-
-        no_evens = self.filter_evens(cumulative_primes)
-
         b = get_batch()
-        j = b.new_job(name='filter-evens')
 
-        # Write cumulative sums to output file
-        j.command(f"echo '{json.dumps(no_evens)}' > {j.no_evens}")
-        b.write_output(j.cumulative, str(self.expected_outputs(sequencing_group).get('no_evens', '')))
+        no_evens_output_path = str(self.expected_outputs(sequencing_group).get('no_evens', ''))
+        job_no_evens = filter_evens(b, input_json, no_evens_output_path)
+
+        jobs = [job_no_evens]
 
         return self.make_outputs(
             sequencing_group,
             data=self.expected_outputs(sequencing_group).get('no_evens'),
-            jobs=[j],
+            jobs=jobs,
         )
-
-    def filter_evens(self, numbers: list[int]) -> list[int]:
-        return [num for num in numbers if num % 2 != 0]
 
 
 @stage(

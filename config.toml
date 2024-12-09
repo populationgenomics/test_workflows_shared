@@ -7,7 +7,7 @@ access_level = 'test'
 force_stages = [
     'GeneratePrimes',
     'CumulativeCalc',
-    # 'FilterEvens',
+    'FilterEvens',
     # 'BuildAPrimePyramid',
 ]
 

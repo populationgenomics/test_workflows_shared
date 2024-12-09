@@ -8,7 +8,7 @@ def cumulative_calc(
     input_file_path: str,
     output_file_path: str,
 ) -> list[Job]:
-    title = 'First N Primes'
+    title = 'Cumulative Calc'
     job = b.new_job(name=title)
     primes_path = b.read_input(input_file_path)
 
@@ -25,7 +25,7 @@ def cumulative_calc(
 
     job.command(cmd)
 
-    print('-----PRINT PRIMES-----')
+    print('-----PRINT CUMULATIVE-----')
     print(output_file_path)
     b.write_output(job.cumulative, output_file_path)
 
