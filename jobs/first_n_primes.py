@@ -10,6 +10,7 @@ def first_n_primes(
 ) -> list[Job]:
     title = 'First N Primes'
     job = b.new_job(name=title)
+    id_sum_path = b.read_input(input_file_path)
 
     cmd = f"""
     is_prime() {{
@@ -27,7 +28,7 @@ def first_n_primes(
         echo 1
     }}
 
-    n=$(cat {input_file_path})  # Replace with the desired number of primes
+    n=$(cat {id_sum_path})  # Replace with the desired number of primes
     primes=()
     candidate=2
     while [ ${{#primes[@]}} -lt $n ]; do
