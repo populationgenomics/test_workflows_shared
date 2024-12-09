@@ -5,7 +5,7 @@ from cpg_flow.targets.sequencing_group import SequencingGroup
 from cpg_utils import Path
 from cpg_utils.hail_batch import get_batch
 
-from jobs import first_n_primes, iterative_digit_sum
+from jobs import cumulative_calc, first_n_primes, iterative_digit_sum
 
 """
 Here's a fun programming task with four interdependent steps, using the concept of **prime numbers** and their relationships:
@@ -86,27 +86,16 @@ class CumulativeCalc(SequencingGroupStage):
         print(input_json)
         b = get_batch()
 
-        j = b.new_python_job(name='cumulative-calc')
-        # j.call(load_primes_json, str(input_json))
+        cumulative_calc_output_path = str(self.expected_outputs(sequencing_group).get('cumulative', ''))
+        job_cumulative_calc = cumulative_calc(b, input_json, cumulative_calc_output_path)
 
-        # Write cumulative sums to output file
-        # j.command(f"echo '{json.dumps(cumulative)}' > {j.cumulative}")
-        # b.write_output(primes.as_json(), str(self.expected_outputs(sequencing_group).get('cumulative', '')))
+        jobs = [job_cumulative_calc]
 
         return self.make_outputs(
             sequencing_group,
             data=self.expected_outputs(sequencing_group).get('cumulative'),
-            jobs=[j],
+            jobs=jobs,
         )
-
-    def cumulative_sum(self, primes: list[int]) -> list[int]:
-        csum = 0
-        cumulative = []
-        for i in range(len(primes)):
-            csum += primes[i]
-            cumulative.append(csum)
-
-        return cumulative
 
 
 @stage(required_stages=[CumulativeCalc])
