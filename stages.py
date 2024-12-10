@@ -104,13 +104,11 @@ class FilterEvens(CohortStage):
 
     def queue_jobs(self, cohort: Cohort, inputs: StageInput) -> StageOutput | None:
         b = get_batch()
-        input_files = inputs.as_dict_by_target(CumulativeCalc)
-        print(input_files)
 
         jobs = []
         no_evens_output_path = str(self.expected_outputs(cohort).get('no_evens', ''))
         for sg in cohort.get_sequencing_groups():
-            input_json = input_files.get(sg).get('cumulative')
+            input_json = inputs.as_path(sg, CumulativeCalc, 'cumulative')
             jobs.append(filter_evens(b, sg, input_json, no_evens_output_path))
 
         return self.make_outputs(
