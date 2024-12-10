@@ -104,7 +104,7 @@ class FilterEvens(CohortStage):
 
     def queue_jobs(self, cohort: Cohort, inputs: StageInput) -> StageOutput | None:
         b = get_batch()
-        input_files = inputs.as_path_dict_by_target(CumulativeCalc)
+        input_files = inputs.as_dict_by_target(CumulativeCalc)
         print(input_files)
 
         jobs = []
