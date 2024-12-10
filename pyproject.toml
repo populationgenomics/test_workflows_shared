@@ -10,7 +10,12 @@ dependencies = [
 ]
 
 [tool.uv]
-dev-dependencies = ["black>=24.10.0", "pip-audit>=2.7.3", "pre-commit>=4.0.1"]
+dev-dependencies = [
+    "black>=24.10.0",
+    "cpg-flow>=0.1.0a9",
+    "pip-audit>=2.7.3",
+    "pre-commit>=4.0.1",
+]
 
 [tool.uv.sources]
 

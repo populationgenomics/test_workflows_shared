@@ -90,7 +90,7 @@ class CumulativeCalc(SequencingGroupStage):
 
         return self.make_outputs(
             sequencing_group,
-            data=self.expected_outputs(sequencing_group).get('cumulative'),
+            data=self.expected_outputs(sequencing_group),
             jobs=jobs,
         )
 
