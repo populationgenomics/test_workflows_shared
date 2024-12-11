@@ -103,7 +103,7 @@ class FilterEvens(CohortStage):
         }
 
     def queue_jobs(self, cohort: Cohort, inputs: StageInput) -> StageOutput | None:
-        input_files = inputs.as_path_dict_by_target(GeneratePrimes)
+        input_files = inputs.as_path_dict_by_target(CumulativeCalc)
         b = get_batch()
 
         no_evens_output_path = str(self.expected_outputs(cohort).get('no_evens', ''))
