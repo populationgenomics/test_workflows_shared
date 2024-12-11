@@ -1,4 +1,4 @@
-import json
+from typing import Any
 
 from cpg_flow.stage import CohortStage, MultiCohortStage, SequencingGroupStage, StageInput, StageOutput, stage
 from cpg_flow.targets.cohort import Cohort
@@ -140,12 +140,20 @@ class BuildAPrimePyramid(MultiCohortStage):
 
         print('----INPUT FILES FILTER EVENS----')
         print(input_files_filter_evens)
+        test_input = inputs.as_dict(multicohort, FilterEvens)
+        print('----TEST INPUT----')
+        print(test_input)
 
         input_files_generate_primes = inputs.as_dict_by_target(GeneratePrimes)
         print('----INPUT FILES GENERATE PRIMES----')
         print(input_files_generate_primes)
 
-        input_files = {k: {**v, **input_files_generate_primes[k]} for k, v in input_files_filter_evens.items()}
+        input_files: dict[str, dict[str, Any]] = {}
+        for cohort in multicohort.get_cohorts():
+            for sg in cohort.get_sequencing_groups():
+                input_files[sg.id]['no_evens'] = input_files_filter_evens[sg.id]
+                input_files[sg.id]['id_sum'] = input_files_generate_primes[sg.id]['id_sum']
+                input_files[sg.id]['primes'] = input_files_generate_primes[sg.id]['primes']
 
         print('----INPUT FILES----')
         print(input_files)
