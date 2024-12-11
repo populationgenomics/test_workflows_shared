@@ -1,5 +1,12 @@
 [workflow]
 dataset = 'fewgenomes'
+
+# Note: for fewgenomes and sandbox mentioning datasets by name is not a security risk
+# DO NOT DO THIS FOR OTHER DATASETS
+# fewgenomes only cohort = COH2142
+# sandbox only cohort = COH2209
+# fewgenomes + sandbox cohort = COH2217
+
 input_cohorts = ['COH2142']
 access_level = 'test'
 

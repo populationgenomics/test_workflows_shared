@@ -1,13 +1,14 @@
 from cpg_flow.targets.sequencing_group import SequencingGroup
 from hailtop.batch import Batch
 from hailtop.batch.job import Job
+from hailtop.batch.resource import ResourceFile
 
 
 def filter_evens(
     b: Batch,
     sequencing_group: SequencingGroup,
     input_file_path: str,
-    output_file_path: str,
+    output_file: ResourceFile,
     job_wait_for: Job | None = None,
 ) -> list[Job]:
     title = 'Filter Evens'
@@ -25,13 +26,8 @@ def filter_evens(
             result+=("$num")
         fi
     done
-    echo "{sequencing_group.id}: ${{result[@]}}" >> {job.no_evens}
+    echo "{sequencing_group.id}: ${{result[@]}}" >> {output_file}
     """
 
     job.command(cmd)
-
-    print('-----PRINT NO EVENS-----')
-    print(output_file_path)
-    b.write_output(job.no_evens, output_file_path)
-
     return job
