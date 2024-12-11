@@ -1,8 +1,8 @@
 import json
 
-from cpg_flow.stage import CohortStage, DatasetStage, SequencingGroupStage, StageInput, StageOutput, stage
+from cpg_flow.stage import CohortStage, MultiCohortStage, SequencingGroupStage, StageInput, StageOutput, stage
 from cpg_flow.targets.cohort import Cohort
-from cpg_flow.targets.dataset import Dataset
+from cpg_flow.targets.multicohort import MultiCohort
 from cpg_flow.targets.sequencing_group import SequencingGroup
 from cpg_utils import Path
 from cpg_utils.hail_batch import get_batch
@@ -47,13 +47,15 @@ Example: For `[5, 17]`, the pyramid is:
 This task is simple, yet it combines loops, conditionals, and basic data manipulations in a creative way!
 """
 
+WORKFLOW_FOLDER = 'prime_pyramid'
+
 
 @stage(analysis_keys=['id_sum', 'primes'], analysis_type='prime_pyramid')
 class GeneratePrimes(SequencingGroupStage):
     def expected_outputs(self, sequencing_group: SequencingGroup) -> dict[str, Path | str]:
         return {
-            'id_sum': sequencing_group.dataset.prefix() / f'{sequencing_group.id}_id_sum.txt',
-            'primes': sequencing_group.dataset.prefix() / f'{sequencing_group.id}_primes.json',
+            'id_sum': sequencing_group.dataset.prefix() / WORKFLOW_FOLDER / f'{sequencing_group.id}_id_sum.txt',
+            'primes': sequencing_group.dataset.prefix() / WORKFLOW_FOLDER / f'{sequencing_group.id}_primes.json',
         }
 
     def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput | None:
@@ -77,7 +79,9 @@ class GeneratePrimes(SequencingGroupStage):
 class CumulativeCalc(SequencingGroupStage):
     def expected_outputs(self, sequencing_group: SequencingGroup):
         return {
-            'cumulative': sequencing_group.dataset.prefix() / f'{sequencing_group.id}_cumulative.json',
+            'cumulative': sequencing_group.dataset.prefix()
+            / WORKFLOW_FOLDER
+            / f'{sequencing_group.id}_cumulative.json',
         }
 
     def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput | None:
@@ -97,46 +101,48 @@ class CumulativeCalc(SequencingGroupStage):
 
 
 @stage(required_stages=[CumulativeCalc], analysis_keys=['no_evens'], analysis_type='prime_pyramid')
-class FilterEvens(DatasetStage):
-    def expected_outputs(self, dataset: Dataset):
-        return {
-            'no_evens': dataset.prefix() / f'{dataset.name}_no_evens.txt',
-        }
-
-    def queue_jobs(self, dataset: Dataset, inputs: StageInput) -> StageOutput | None:
-        input_files = inputs.as_dict_by_target(CumulativeCalc)
-        b = get_batch()
-
-        no_evens_output_path = str(self.expected_outputs(dataset).get('no_evens', ''))
-        job_no_evens = filter_evens(b, dataset.get_sequencing_groups(), input_files, no_evens_output_path)
-
-        jobs = [job_no_evens]
-
-        return self.make_outputs(
-            dataset,
-            data=self.expected_outputs(dataset),
-            jobs=jobs,
-        )
-
-
-@stage(required_stages=[GeneratePrimes, FilterEvens], analysis_keys=['pyramid'], analysis_type='prime_pyramid')
-class BuildAPrimePyramid(CohortStage):
+class FilterEvens(CohortStage):
     def expected_outputs(self, cohort: Cohort):
         return {
-            'pyramid': cohort.prefix() / f'{cohort.name}_pyramid.txt',
+            'no_evens': cohort.analysis_dataset.prefix() / WORKFLOW_FOLDER / f'{cohort.name}_no_evens.txt',
         }
 
     def queue_jobs(self, cohort: Cohort, inputs: StageInput) -> StageOutput | None:
-        input_files = inputs.as_dict_by_target(FilterEvens)
+        input_files = inputs.as_dict_by_target(CumulativeCalc)
         b = get_batch()
 
         no_evens_output_path = str(self.expected_outputs(cohort).get('no_evens', ''))
-        job_no_evens = build_pyramid(b, cohort.get_sequencing_groups(), input_files, no_evens_output_path)
+        job_no_evens = filter_evens(b, cohort.get_sequencing_groups(), input_files, no_evens_output_path)
 
         jobs = [job_no_evens]
 
         return self.make_outputs(
             cohort,
             data=self.expected_outputs(cohort),
+            jobs=jobs,
+        )
+
+
+@stage(required_stages=[GeneratePrimes, FilterEvens], analysis_keys=['pyramid'], analysis_type='prime_pyramid')
+class BuildAPrimePyramid(MultiCohortStage):
+    def expected_outputs(self, multicohort: MultiCohort):
+        return {
+            'pyramid': multicohort.analysis_dataset.prefix() / WORKFLOW_FOLDER / f'{multicohort.name}_pyramid.txt',
+        }
+
+    def queue_jobs(self, multicohort: MultiCohort, inputs: StageInput) -> StageOutput | None:
+        input_files_filter_evens = inputs.as_dict_by_target(FilterEvens)
+        input_files_generate_primes = inputs.as_dict_by_target(GeneratePrimes)
+        input_files = {**input_files_filter_evens, **input_files_generate_primes}
+        b = get_batch()
+
+        pyramid_output_path = str(self.expected_outputs(multicohort).get('pyramid', ''))
+        job_pyramid = build_pyramid(b, multicohort.get_sequencing_groups(), input_files, pyramid_output_path)
+
+        jobs = [job_pyramid]
+
+        return self.make_outputs(
+            multicohort,
+            data=self.expected_outputs(multicohort),
             jobs=jobs,
         )

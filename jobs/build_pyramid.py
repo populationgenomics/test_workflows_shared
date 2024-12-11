@@ -18,40 +18,42 @@ def build_pyramid(
     # Compute the no evens list for each sequencing group
     sg_output_files = []
     for sg in sequencing_groups:  # type: ignore
-        input_file_path = input_files[sg.id]['cumulative']
-        no_evens_input_file = b.read_input(input_file_path)
-        no_evens_output_file_path = sg.dataset.prefix() / f'{sg.id}_no_evens.txt'
-        sg_output_files.append(no_evens_output_file_path)
+        no_evens_input_file_path = input_files[sg.id]['no_evens']
+        id_sum_input_file_path = input_files[sg.id]['id_sum']
 
-        cmd = ''
+        no_evens_input_file = b.read_input(no_evens_input_file_path)
+        id_sum_input_file = b.read_input(id_sum_input_file_path)
 
-        # cmd = f"""
-        #     pyramid=()
-        #     max_row_size={{rows[-1]}}
+        pyramid_output_file_path = sg.dataset.prefix() / f'{sg.id}_pyramid.txt'
+        sg_output_files.append(pyramid_output_file_path)
 
-        #     # Add header
-        #     pyramid+=("Prime Pyramid for {{sequencing_group.id}}")
-        #     pyramid+=("Generated N: {n}")
+        cmd = f"""
+            pyramid=()
+            max_row_size=(cat {no_evens_input_file} | rev | cut -d' ' -f1 | rev)
 
-        #     for row in {rows[@]}; do
-        #         total_spaces=$((max_row_size - row))
-        #         left_spaces=$((total_spaces / 2))
-        #         right_spaces=$((total_spaces - left_spaces))
-        #         pyramid+=("$(printf '%*s' $left_spaces)$(printf '%*s' $row | tr ' ' '*')$(printf '%*s' $right_spaces)")
-        #     done
+            # Add header
+            pyramid+=("Prime Pyramid for {sg.id}")
+            pyramid+=("Generated N: $(cat {id_sum_input_file})")
 
-        #     printf "%s\\n" "${pyramid[@]}" > {job.pyramid_file}
-        # """
+            for row in {{rows[@]}}; do
+                total_spaces=$((max_row_size - row))
+                left_spaces=$((total_spaces / 2))
+                right_spaces=$((total_spaces - left_spaces))
+                pyramid+=("$(printf '%*s' $left_spaces)$(printf '%*s' $row | tr ' ' '*')$(printf '%*s' $right_spaces)")
+            done
+
+            printf "%s\\n" "${{pyramid[@]}}" > {job.pyramid_file}
+        """
 
         job.command(cmd)
-        b.write_output(job.no_evens_sg_file, no_evens_output_file_path)
+        b.write_output(job.pyramid_file, pyramid_output_file_path)
 
     # Merge the no evens lists for all sequencing groups into a single file
     inputs = ' '.join([b.read_input(f) for f in sg_output_files])
-    job.command(f'cat {inputs} >> {job.no_evens_file}')
+    job.command(f'cat {inputs} >> {job.pyramid_file}')
 
     print('-----PRINT NO EVENS-----')
     print(output_file_path)
-    b.write_output(job.no_evens_file, output_file_path)
+    b.write_output(job.pyramid_file, output_file_path)
 
     return job
