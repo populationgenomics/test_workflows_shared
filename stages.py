@@ -103,7 +103,7 @@ class FilterEvens(CohortStage):
         }
 
     def queue_jobs(self, cohort: Cohort, inputs: StageInput) -> StageOutput | None:
-        input_files = inputs.as_path_dict_by_target(CumulativeCalc)
+        input_files = inputs.as_dict_by_target(CumulativeCalc)
         b = get_batch()
 
         no_evens_output_path = str(self.expected_outputs(cohort).get('no_evens', ''))
@@ -146,19 +146,3 @@ class BuildAPrimePyramid(CohortStage):
             data=self.expected_outputs(sequencing_group),
             jobs=[j],
         )
-
-    def file_contents(self, sequencing_group: SequencingGroup, n: int, rows: list[int]) -> str:
-        pyramid = []
-        max_row_size = rows[-1]
-
-        # Add header
-        pyramid.append(f'Prime Pyramid for {sequencing_group.id}')
-        pyramid.append(f'Generated N: {n}')
-
-        for row in rows:
-            total_spaces = max_row_size - row
-            left_spaces = total_spaces // 2
-            right_spaces = total_spaces - left_spaces
-            pyramid.append(' ' * left_spaces + '*' * row + ' ' * right_spaces)
-
-        return '\n'.join(pyramid)
