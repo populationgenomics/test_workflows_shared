@@ -27,7 +27,7 @@ def build_pyramid(
         sg_output_files.append(pyramid_output_file_path)
         cmd = f"""
             pyramid=()
-            max_row_size=(cat {no_evens_input_file} | rev | cut -d' ' -f1 | rev)
+            max_row_size=$(cat {no_evens_input_file} | rev | cut -d' ' -f1 | rev)
 
             # Add header
             pyramid+=("Prime Pyramid for {sg.id}")
