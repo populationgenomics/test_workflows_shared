@@ -147,8 +147,8 @@ class BuildAPrimePyramid(MultiCohortStage):
             for sg in cohort.get_sequencing_groups():
                 input_files[sg.id] = {}
                 input_files[sg.id]['no_evens'] = input_files_filter_evens[sg.id]
-                input_files[sg.id]['id_sum'] = input_files_generate_primes[sg.id]['id_sum']
-                input_files[sg.id]['primes'] = input_files_generate_primes[sg.id]['primes']
+                input_files[sg.id]['id_sum'] = str(input_files_generate_primes[sg.id]['id_sum'])
+                input_files[sg.id]['primes'] = str(input_files_generate_primes[sg.id]['primes'])
 
         print('----INPUT FILES----')
         print(input_files)
