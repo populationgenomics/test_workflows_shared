@@ -8,10 +8,14 @@ def filter_evens(
     sequencing_group: SequencingGroup,
     input_file_path: str,
     output_file_path: str,
+    job_wait_for: Job | None = None,
 ) -> list[Job]:
     title = 'Filter Evens'
     job = b.new_job(name=title)
     cumulative_path = b.read_input(input_file_path)
+
+    if job_wait_for:
+        job.depends_on(job_wait_for)
 
     cmd = f"""
     numbers=($(cat {cumulative_path}))

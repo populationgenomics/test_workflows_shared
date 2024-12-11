@@ -106,14 +106,17 @@ class FilterEvens(CohortStage):
         b = get_batch()
 
         jobs = []
+        job_wait_for = None
         no_evens_output_path = str(self.expected_outputs(cohort).get('no_evens', ''))
         for sg in cohort.get_sequencing_groups():
             input_json = inputs.as_path(sg, CumulativeCalc, 'cumulative')
-            jobs.append(filter_evens(b, sg, input_json, no_evens_output_path))
+            new_job = filter_evens(b, sg, input_json, no_evens_output_path, job_wait_for)
+            job_wait_for = new_job
+            jobs.append(new_job)
 
         return self.make_outputs(
             cohort,
-            data=self.expected_outputs(cohort).get('no_evens'),
+            data=self.expected_outputs(cohort),
             jobs=jobs,
         )
 
@@ -143,7 +146,7 @@ class BuildAPrimePyramid(CohortStage):
 
         return self.make_outputs(
             sequencing_group,
-            data=self.expected_outputs(sequencing_group).get('pyramid'),
+            data=self.expected_outputs(sequencing_group),
             jobs=[j],
         )
 

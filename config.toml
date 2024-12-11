@@ -5,8 +5,8 @@ access_level = 'test'
 
 # Force stage rerun
 force_stages = [
-    'GeneratePrimes',
-    'CumulativeCalc',
+    # 'GeneratePrimes',
+    # 'CumulativeCalc',
     'FilterEvens',
     # 'BuildAPrimePyramid',
 ]
