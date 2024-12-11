@@ -28,15 +28,16 @@ def build_pyramid(
         cmd = f"""
             pyramid=()
             max_row_size=$(cat {no_evens_input_file} | rev | cut -d' ' -f1 | rev)
-
+            rows=($(cat {no_evens_input_file} | cut -d' ' -f2-))
             # Add header
             pyramid+=("Prime Pyramid for {sg.id}")
             pyramid+=("Generated N: $(cat {id_sum_input_file})")
 
-            for row in {{rows[@]}}; do
+            for row in "${{rows[@]}}"; do
                 total_spaces=$((max_row_size - row))
                 left_spaces=$((total_spaces / 2))
                 right_spaces=$((total_spaces - left_spaces))
+                pyramid+=("$(printf '%*s' $left_spaces)$(printf '%*s' $row | tr ' ' '*')$(printf '%*s' $right_spaces)")
                 pyramid+=("$(printf '%*s' $left_spaces)$(printf '%*s' $row | tr ' ' '*')$(printf '%*s' $right_spaces)")
             done
 

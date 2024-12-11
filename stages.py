@@ -104,7 +104,8 @@ class CumulativeCalc(SequencingGroupStage):
 class FilterEvens(CohortStage):
     def expected_outputs(self, cohort: Cohort):
         sg_outputs = {
-            sg.id: str(sg.dataset.prefix() / f'{sg.id}_no_evens.txt') for sg in cohort.get_sequencing_groups()
+            sg.id: str(sg.dataset.prefix() / WORKFLOW_FOLDER / f'{sg.id}_no_evens.txt')
+            for sg in cohort.get_sequencing_groups()
         }
         sg_outputs['no_evens'] = cohort.analysis_dataset.prefix() / WORKFLOW_FOLDER / f'{cohort.name}_no_evens.txt'
         return sg_outputs
