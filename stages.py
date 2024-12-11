@@ -134,15 +134,9 @@ class BuildAPrimePyramid(MultiCohortStage):
         }
 
     def queue_jobs(self, multicohort: MultiCohort, inputs: StageInput) -> StageOutput | None:
-        input_files_filter_evens = {}
-        for cohort in multicohort.get_cohorts():
-            input_files_filter_evens.update(inputs.as_dict(cohort, FilterEvens))
-
+        input_files_filter_evens = inputs.as_dict(multicohort, FilterEvens)
         print('----INPUT FILES FILTER EVENS----')
         print(input_files_filter_evens)
-        test_input = inputs.as_dict(multicohort, FilterEvens)
-        print('----TEST INPUT----')
-        print(test_input)
 
         input_files_generate_primes = inputs.as_dict_by_target(GeneratePrimes)
         print('----INPUT FILES GENERATE PRIMES----')
@@ -151,6 +145,7 @@ class BuildAPrimePyramid(MultiCohortStage):
         input_files: dict[str, dict[str, Any]] = {}
         for cohort in multicohort.get_cohorts():
             for sg in cohort.get_sequencing_groups():
+                input_files[sg.id] = {}
                 input_files[sg.id]['no_evens'] = input_files_filter_evens[sg.id]
                 input_files[sg.id]['id_sum'] = input_files_generate_primes[sg.id]['id_sum']
                 input_files[sg.id]['primes'] = input_files_generate_primes[sg.id]['primes']
