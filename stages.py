@@ -62,6 +62,10 @@ class GeneratePrimes(SequencingGroupStage):
         # Get batch
         b = get_batch()
 
+        # Print out alignment input for this sequencing group
+        print('-----ALIGNMENT INPUT-----')
+        print(sequencing_group.alignment_input)
+
         # Write id_sum to output file
         id_sum_output_path = str(self.expected_outputs(sequencing_group).get('id_sum', ''))
         job_id_sum = iterative_digit_sum(b, sequencing_group, id_sum_output_path)
