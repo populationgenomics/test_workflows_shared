@@ -44,7 +44,7 @@ def build_pyramid(
         """
 
         job.command(cmd)
-        b.write_output(job.sg_no_evens_file, pyramid_output_file_path)
+        b.write_output(job.pyramid_file, pyramid_output_file_path)
         sg_jobs.append(job)
 
     # Merge the no evens lists for all sequencing groups into a single file
