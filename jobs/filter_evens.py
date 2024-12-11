@@ -20,7 +20,7 @@ def filter_evens(
     for sg in sequencing_groups:  # type: ignore
         input_file_path = input_files[sg.id]['cumulative']
         no_evens_input_file = b.read_input(input_file_path)
-        no_evens_output_file_path = sg.dataset.prefix() / f'{sg.id}_no_evens.txt'
+        no_evens_output_file_path = str(sg.dataset.prefix() / f'{sg.id}_no_evens.txt')
         sg_output_files.append(no_evens_output_file_path)
 
         cmd = f"""
