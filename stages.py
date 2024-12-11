@@ -134,10 +134,14 @@ class BuildAPrimePyramid(MultiCohortStage):
         }
 
     def queue_jobs(self, multicohort: MultiCohort, inputs: StageInput) -> StageOutput | None:
-        input_files_filter_evens = inputs.as_dict_by_target(FilterEvens)
-        input_files_generate_primes = inputs.as_dict_by_target(GeneratePrimes)
+        input_files_filter_evens = {}
+        for cohort in multicohort.get_cohorts():
+            input_files_filter_evens.update(inputs.as_dict(cohort, FilterEvens))
+
         print('----INPUT FILES FILTER EVENS----')
         print(input_files_filter_evens)
+
+        input_files_generate_primes = inputs.as_dict_by_target(GeneratePrimes)
         print('----INPUT FILES GENERATE PRIMES----')
         print(input_files_generate_primes)
 
