@@ -3,7 +3,6 @@ from typing import Any
 from cpg_flow.targets.sequencing_group import SequencingGroup
 from hailtop.batch import Batch
 from hailtop.batch.job import Job
-from hailtop.batch.resource import ResourceFile
 
 
 def filter_evens(
@@ -11,7 +10,7 @@ def filter_evens(
     sequencing_groups: list[SequencingGroup],
     input_files: dict[str, dict[str, Any]],
     sg_outputs: dict[str, dict[str, Any]],
-    output_file_path: ResourceFile,
+    output_file_path: str,
 ) -> list[Job]:
     title = 'Filter Evens'
 
