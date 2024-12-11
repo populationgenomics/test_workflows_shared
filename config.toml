@@ -7,7 +7,7 @@ dataset = 'fewgenomes'
 # sandbox only cohort = COH2209
 # fewgenomes + sandbox cohort = COH2217
 
-input_cohorts = ['COH2217']
+input_cohorts = ['COH2142']
 access_level = 'test'
 
 # Force stage rerun

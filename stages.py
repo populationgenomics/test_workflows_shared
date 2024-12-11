@@ -7,7 +7,7 @@ from cpg_flow.targets.sequencing_group import SequencingGroup
 from cpg_utils import Path
 from cpg_utils.hail_batch import get_batch
 
-from jobs import cumulative_calc, filter_evens, first_n_primes, iterative_digit_sum
+from jobs import build_pyramid, cumulative_calc, filter_evens, first_n_primes, iterative_digit_sum
 
 """
 Here's a fun programming task with four interdependent steps, using the concept of **prime numbers** and their relationships:
@@ -121,29 +121,22 @@ class FilterEvens(DatasetStage):
 
 @stage(required_stages=[GeneratePrimes, FilterEvens], analysis_keys=['pyramid'], analysis_type='prime_pyramid')
 class BuildAPrimePyramid(CohortStage):
-    def expected_outputs(self, sequencing_group: SequencingGroup):
+    def expected_outputs(self, cohort: Cohort):
         return {
-            'pyramid': sequencing_group.dataset.prefix() / f'{sequencing_group.id}_pyramid.txt',
+            'pyramid': cohort.prefix() / f'{cohort.name}_pyramid.txt',
         }
 
-    def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput | None:
-        input_json = inputs.as_path(sequencing_group, FilterEvens, 'no_evens')
-        row_sizes = json.load(open(input_json))
-
-        input_n = inputs.as_path(sequencing_group, GeneratePrimes, 'id_sum')
-        n = int(open(input_n).read().strip())
-
-        pyramid = self.file_contents(sequencing_group, n, row_sizes)
-
+    def queue_jobs(self, cohort: Cohort, inputs: StageInput) -> StageOutput | None:
+        input_files = inputs.as_dict_by_target(FilterEvens)
         b = get_batch()
-        j = b.new_job(name='filter-evens')
 
-        # Write pyramid to output file
-        j.command(f"echo '{json.dumps(pyramid)}' > {j.pyramid}")
-        b.write_output(j.cumulative, str(self.expected_outputs(sequencing_group).get('pyramid', '')))
+        no_evens_output_path = str(self.expected_outputs(cohort).get('no_evens', ''))
+        job_no_evens = build_pyramid(b, cohort.get_sequencing_groups(), input_files, no_evens_output_path)
+
+        jobs = [job_no_evens]
 
         return self.make_outputs(
-            sequencing_group,
-            data=self.expected_outputs(sequencing_group),
-            jobs=[j],
+            cohort,
+            data=self.expected_outputs(cohort),
+            jobs=jobs,
         )
