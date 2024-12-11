@@ -103,16 +103,19 @@ class CumulativeCalc(SequencingGroupStage):
 @stage(required_stages=[CumulativeCalc], analysis_keys=['no_evens'], analysis_type='custom')
 class FilterEvens(CohortStage):
     def expected_outputs(self, cohort: Cohort):
-        return {
-            'no_evens': cohort.analysis_dataset.prefix() / WORKFLOW_FOLDER / f'{cohort.name}_no_evens.txt',
+        sg_outputs = {
+            k: str(sg.dataset.prefix() / f'{sg.id}_no_evens.txt') for k, sg in cohort.get_sequencing_groups().items()
         }
+        sg_outputs['no_evens'] = cohort.analysis_dataset.prefix() / WORKFLOW_FOLDER / f'{cohort.name}_no_evens.txt'
+        return sg_outputs
 
     def queue_jobs(self, cohort: Cohort, inputs: StageInput) -> StageOutput | None:
         input_files = inputs.as_dict_by_target(CumulativeCalc)
         b = get_batch()
 
-        no_evens_output_path = str(self.expected_outputs(cohort).get('no_evens', ''))
-        job_no_evens = filter_evens(b, cohort.get_sequencing_groups(), input_files, no_evens_output_path)
+        sg_outputs = self.expected_outputs(cohort)
+        no_evens_output_path = sg_outputs['no_evens']
+        job_no_evens = filter_evens(b, cohort.get_sequencing_groups(), input_files, sg_outputs, no_evens_output_path)
 
         jobs = [job_no_evens]
 
@@ -138,7 +141,7 @@ class BuildAPrimePyramid(MultiCohortStage):
         print('----INPUT FILES GENERATE PRIMES----')
         print(input_files_generate_primes)
 
-        input_files = {k: {**v, **input_files_filter_evens[k]} for k, v in input_files_generate_primes.items()}
+        input_files = {k: {**v, **input_files_generate_primes[k]} for k, v in input_files_filter_evens.items()}
 
         print('----INPUT FILES----')
         print(input_files)

@@ -9,7 +9,8 @@ from hailtop.batch.resource import ResourceFile
 def filter_evens(
     b: Batch,
     sequencing_groups: list[SequencingGroup],
-    input_files: dict[str, Any],
+    input_files: dict[str, dict[str, Any]],
+    sg_outputs: dict[str, dict[str, Any]],
     output_file_path: ResourceFile,
 ) -> list[Job]:
     title = 'Filter Evens'
@@ -21,7 +22,7 @@ def filter_evens(
         job = b.new_job(name=title + ': ' + sg.id)
         input_file_path = input_files[sg.id]['cumulative']
         no_evens_input_file = b.read_input(input_file_path)
-        no_evens_output_file_path = str(sg.dataset.prefix() / f'{sg.id}_no_evens.txt')
+        no_evens_output_file_path = str(sg_outputs[sg.id])
         sg_output_files.append(no_evens_output_file_path)
 
         cmd = f"""
