@@ -103,23 +103,13 @@ class FilterEvens(CohortStage):
         }
 
     def queue_jobs(self, cohort: Cohort, inputs: StageInput) -> StageOutput | None:
+        input_files = inputs.as_path_dict_by_target(GeneratePrimes)
         b = get_batch()
 
-        jobs = []
-        job_wait_for = None
         no_evens_output_path = str(self.expected_outputs(cohort).get('no_evens', ''))
-        no_evens_output_file = b.resource_file(no_evens_output_path)
+        job_no_evens = filter_evens(b, cohort.get_sequencing_groups(), input_files, no_evens_output_path)
 
-        for sg in cohort.get_sequencing_groups():
-            input_json = inputs.as_path(sg, CumulativeCalc, 'cumulative')
-            new_job = filter_evens(b, sg, input_json, no_evens_output_file, job_wait_for)
-            job_wait_for = new_job
-            jobs.append(new_job)
-
-        b.write_output(no_evens_output_file, no_evens_output_path)
-
-        print('-----PRINT NO EVENS-----')
-        print(no_evens_output_path)
+        jobs = [job_no_evens]
 
         return self.make_outputs(
             cohort,
