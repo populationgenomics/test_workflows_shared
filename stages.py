@@ -138,7 +138,11 @@ class BuildAPrimePyramid(MultiCohortStage):
         print('----INPUT FILES GENERATE PRIMES----')
         print(input_files_generate_primes)
 
-        input_files = {**input_files_filter_evens, **input_files_generate_primes}
+        input_files = {k: {**v, **input_files_filter_evens[k]} for k, v in input_files_generate_primes.items()}
+
+        print('----INPUT FILES----')
+        print(input_files)
+
         b = get_batch()
 
         pyramid_output_path = str(self.expected_outputs(multicohort).get('pyramid', ''))
