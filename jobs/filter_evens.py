@@ -41,7 +41,7 @@ def filter_evens(
 
     # Merge the no evens lists for all sequencing groups into a single file
     job = b.new_job(name=title)
-    job.depends_on(sg_jobs)
+    job.depends_on(*sg_jobs)
     inputs = ' '.join([b.read_input(f) for f in sg_output_files])
     job.command(f'cat {inputs} >> {job.no_evens_file}')
     b.write_output(job.no_evens_file, output_file_path)
