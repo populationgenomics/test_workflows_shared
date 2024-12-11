@@ -50,7 +50,7 @@ This task is simple, yet it combines loops, conditionals, and basic data manipul
 WORKFLOW_FOLDER = 'prime_pyramid'
 
 
-@stage(analysis_keys=['id_sum', 'primes'], analysis_type='other')
+@stage(analysis_keys=['id_sum', 'primes'], analysis_type='custom')
 class GeneratePrimes(SequencingGroupStage):
     def expected_outputs(self, sequencing_group: SequencingGroup) -> dict[str, Path | str]:
         return {
@@ -75,7 +75,7 @@ class GeneratePrimes(SequencingGroupStage):
         return self.make_outputs(sequencing_group, data=self.expected_outputs(sequencing_group), jobs=jobs)  # type: ignore
 
 
-@stage(required_stages=[GeneratePrimes], analysis_keys=['cumulative'], analysis_type='other')
+@stage(required_stages=[GeneratePrimes], analysis_keys=['cumulative'], analysis_type='custom')
 class CumulativeCalc(SequencingGroupStage):
     def expected_outputs(self, sequencing_group: SequencingGroup):
         return {
@@ -100,7 +100,7 @@ class CumulativeCalc(SequencingGroupStage):
         )
 
 
-@stage(required_stages=[CumulativeCalc], analysis_keys=['no_evens'], analysis_type='other')
+@stage(required_stages=[CumulativeCalc], analysis_keys=['no_evens'], analysis_type='custom')
 class FilterEvens(CohortStage):
     def expected_outputs(self, cohort: Cohort):
         return {
@@ -123,7 +123,7 @@ class FilterEvens(CohortStage):
         )
 
 
-@stage(required_stages=[GeneratePrimes, FilterEvens], analysis_keys=['pyramid'], analysis_type='other')
+@stage(required_stages=[GeneratePrimes, FilterEvens], analysis_keys=['pyramid'], analysis_type='custom')
 class BuildAPrimePyramid(MultiCohortStage):
     def expected_outputs(self, multicohort: MultiCohort):
         return {
