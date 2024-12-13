@@ -23,20 +23,20 @@ if [[ -n $(git diff) ]]; then
   exit 1
 fi
 
-echo analysis-runner \\
-    --image "australia-southeast1-docker.pkg.dev/cpg-common/images/cpg_flow:$DEFAULT_IMAGE_TAG" \\
-    --dataset "fewgenomes" \\
-    --description "cpg-flow_test" \\
-    --access-level "test" \\
-    --output-dir "cpg-flow_test" \\
-    --config "config.toml" \\
-    workflow.py
+echo "analysis-runner
+  --image "australia-southeast1-docker.pkg.dev/cpg-common/images/cpg_flow:$IMAGE_TAG"
+  --dataset "fewgenomes"
+  --description "cpg-flow_test"
+  --access-level "test"
+  --output-dir "cpg-flow_test"
+  --config "config.toml"
+  workflow.py"
 
 analysis-runner \
-    --image "australia-southeast1-docker.pkg.dev/cpg-common/images/cpg_flow:$DEFAULT_IMAGE_TAG" \
-    --dataset "fewgenomes" \
-    --description "cpg-flow_test" \
-    --access-level "test" \
-    --output-dir "cpg-flow_test" \
-    --config "config.toml" \
-    workflow.py
+  --image "australia-southeast1-docker.pkg.dev/cpg-common/images/cpg_flow:$IMAGE_TAG" \
+  --dataset "fewgenomes" \
+  --description "cpg-flow_test" \
+  --access-level "test" \
+  --output-dir "cpg-flow_test" \
+  --config "config.toml" \
+  workflow.py
