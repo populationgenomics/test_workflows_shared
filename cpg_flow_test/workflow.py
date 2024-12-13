@@ -5,7 +5,6 @@ from pathlib import Path
 
 from cpg_flow.workflow import run_workflow
 from cpg_utils.config import set_config_paths
-
 from stages import BuildAPrimePyramid, CumulativeCalc, FilterEvens, GeneratePrimes
 
 TMP_DIR = os.getenv('TMP_DIR')
