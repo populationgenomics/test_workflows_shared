@@ -117,9 +117,14 @@ class FilterEvens(CohortStage):
         input_files = inputs.as_dict_by_target(CumulativeCalc)
         b = get_batch()
 
+        print('-----INPUTS-----')
+        print(inputs)
+
         sg_outputs = self.expected_outputs(cohort)
         no_evens_output_path = str(sg_outputs['no_evens'])
-        job_no_evens = filter_evens(b, cohort.get_sequencing_groups(), input_files, sg_outputs, no_evens_output_path)
+        job_no_evens = filter_evens(
+            b, inputs, CumulativeCalc, cohort.get_sequencing_groups(), input_files, sg_outputs, no_evens_output_path,
+        )
 
         jobs = [job_no_evens]
 
