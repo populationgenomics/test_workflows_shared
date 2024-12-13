@@ -42,8 +42,6 @@ def iterative_digit_sum(
         iterative_digit_sum "$concatenated_digits"
         }}
 
-        # Example usage
-        # Replace "$1" with your actual input
         echo "Input: {sequencing_group.id}\n"
         result=$(extract_digits_and_sum {sequencing_group.id})
         echo "Result: $result\n"

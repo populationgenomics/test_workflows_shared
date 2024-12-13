@@ -3,14 +3,13 @@ from hailtop.batch import Batch
 from hailtop.batch.job import Job
 
 
-def first_n_primes(
-    b: Batch,
-    input_file_path: str,
-    output_file_path: str,
-) -> list[Job]:
+def first_n_primes(b: Batch, input_file_path: str, output_file_path: str, depends_on: Job) -> list[Job]:
     title = 'First N Primes'
     job = b.new_job(name=title)
     id_sum_path = b.read_input(input_file_path)
+
+    if depends_on:
+        job.depends_on(depends_on)
 
     cmd = f"""
     is_prime() {{

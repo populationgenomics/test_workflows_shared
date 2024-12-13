@@ -71,7 +71,7 @@ class GeneratePrimes(SequencingGroupStage):
 
         # Generate first N primes
         primes_output_path = str(self.expected_outputs(sequencing_group).get('primes', ''))
-        job_primes = first_n_primes(b, id_sum_output_path, primes_output_path)
+        job_primes = first_n_primes(b, id_sum_output_path, primes_output_path, depends_on=job_id_sum)
 
         jobs = [job_id_sum, job_primes]
 
