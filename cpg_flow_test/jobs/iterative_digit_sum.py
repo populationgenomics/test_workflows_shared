@@ -16,15 +16,15 @@ def iterative_digit_sum(
 
         # Function to calculate the iterative digit sum
         iterative_digit_sum() {{
-        local num=$1
-        while [ ${{#num}} -gt 1 ]; do
-            local sum=0
-            for (( i=0; i<${{#num}}; i++ )); do
-            sum=$((sum + ${{num:i:1}}))
+            local num=$1
+            while [ ${{#num}} -gt 2 ]; do
+                local sum=0
+                for (( i=0; i<${{#num}}; i++ )); do
+                sum=$((sum + ${{num:i:1}}))
+                done
+                num=$sum
             done
-            num=$sum
-        done
-        echo $num
+            echo $num
         }}
 
         # Extract digits from the alphanumeric string and calculate digit sum
