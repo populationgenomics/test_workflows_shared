@@ -3,8 +3,10 @@ from hailtop.batch import Batch
 from hailtop.batch.job import Job
 
 
-def first_n_primes(b: Batch, input_file_path: str, output_file_path: str, depends_on: Job) -> list[Job]:
-    title = 'First N Primes'
+def first_n_primes(
+    b: Batch, sequencing_group: SequencingGroup, input_file_path: str, output_file_path: str, depends_on: Job,
+) -> list[Job]:
+    title = f'First N Primes: {sequencing_group.id}'
     job = b.new_job(name=title)
     id_sum_path = b.read_input(input_file_path)
 

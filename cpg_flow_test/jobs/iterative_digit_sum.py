@@ -8,7 +8,7 @@ def iterative_digit_sum(
     sequencing_group: SequencingGroup,
     output_file_path: str,
 ) -> list[Job]:
-    title = 'Iterative Digit Sum'
+    title = f'Iterative Digit Sum: {sequencing_group.id}'
     job = b.new_job(name=title)
 
     cmd = f"""\

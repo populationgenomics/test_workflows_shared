@@ -5,10 +5,11 @@ from hailtop.batch.job import Job
 
 def cumulative_calc(
     b: Batch,
+    sequencing_group: SequencingGroup,
     input_file_path: str,
     output_file_path: str,
 ) -> list[Job]:
-    title = 'Cumulative Calc'
+    title = f'Cumulative Calc: {sequencing_group.id}'
     job = b.new_job(name=title)
     primes_path = b.read_input(input_file_path)
 
