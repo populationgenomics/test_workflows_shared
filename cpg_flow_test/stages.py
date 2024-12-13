@@ -118,7 +118,7 @@ class FilterEvens(CohortStage):
         b = get_batch()
 
         print('-----INPUTS-----')
-        print(inputs.as_dict())
+        print(dict(inputs))
 
         sg_outputs = self.expected_outputs(cohort)
         no_evens_output_path = str(sg_outputs['no_evens'])
