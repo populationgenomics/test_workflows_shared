@@ -58,4 +58,6 @@ def build_pyramid(
     print('-----PRINT PYRAMID-----')
     print(output_file_path)
 
-    return job
+    all_jobs = [job, *sg_jobs]
+
+    return all_jobs

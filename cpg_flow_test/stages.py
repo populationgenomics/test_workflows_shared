@@ -118,20 +118,24 @@ class FilterEvens(CohortStage):
         b = get_batch()
 
         print('-----INPUTS-----')
-        print(inputs)
+        print(inputs.as_dict())
 
         sg_outputs = self.expected_outputs(cohort)
         no_evens_output_path = str(sg_outputs['no_evens'])
         job_no_evens = filter_evens(
-            b, inputs, CumulativeCalc, cohort.get_sequencing_groups(), input_files, sg_outputs, no_evens_output_path,
+            b,
+            inputs,
+            CumulativeCalc,
+            cohort.get_sequencing_groups(),
+            input_files,
+            sg_outputs,
+            no_evens_output_path,
         )
-
-        jobs = [job_no_evens]
 
         return self.make_outputs(
             cohort,
             data=self.expected_outputs(cohort),
-            jobs=jobs,
+            jobs=job_no_evens,
         )
 
 
@@ -167,10 +171,8 @@ class BuildAPrimePyramid(MultiCohortStage):
         pyramid_output_path = str(self.expected_outputs(multicohort).get('pyramid', ''))
         job_pyramid = build_pyramid(b, multicohort.get_sequencing_groups(), input_files, pyramid_output_path)
 
-        jobs = [job_pyramid]
-
         return self.make_outputs(
             multicohort,
             data=self.expected_outputs(multicohort),
-            jobs=jobs,
+            jobs=job_pyramid,
         )

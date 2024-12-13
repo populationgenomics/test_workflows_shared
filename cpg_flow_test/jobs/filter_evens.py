@@ -53,4 +53,6 @@ def filter_evens(
     print('-----PRINT NO EVENS-----')
     print(output_file_path)
 
-    return job
+    all_jobs = [job, *sg_jobs]
+
+    return all_jobs
