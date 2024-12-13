@@ -6,8 +6,7 @@ from cpg_flow.targets.multicohort import MultiCohort
 from cpg_flow.targets.sequencing_group import SequencingGroup
 from cpg_utils import Path
 from cpg_utils.hail_batch import get_batch
-
-from cpg_flow_test.jobs import build_pyramid, cumulative_calc, filter_evens, first_n_primes, iterative_digit_sum
+from jobs import build_pyramid, cumulative_calc, filter_evens, first_n_primes, iterative_digit_sum
 
 """
 Here's a fun programming task with four interdependent steps, using the concept of **prime numbers** and their relationships:
