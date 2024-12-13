@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DEFAULT_IMAGE_TAG="0.1.0-alpha.9"
+DEFAULT_IMAGE_TAG="images/cpg_flow:0.1.0-alpha.9"
 
 # If there is a command line argument, use it as the image tag
 if [[ -n $1 ]]; then
@@ -24,7 +24,7 @@ if [[ -n $(git diff) ]]; then
 fi
 
 echo "analysis-runner
-  --image "australia-southeast1-docker.pkg.dev/cpg-common/images/cpg_flow:$IMAGE_TAG"
+  --image "australia-southeast1-docker.pkg.dev/cpg-common/$IMAGE_TAG"
   --dataset "fewgenomes"
   --description "cpg-flow_test"
   --access-level "test"
@@ -33,7 +33,7 @@ echo "analysis-runner
   workflow.py"
 
 analysis-runner \
-  --image "australia-southeast1-docker.pkg.dev/cpg-common/images/cpg_flow:$IMAGE_TAG" \
+  --image "australia-southeast1-docker.pkg.dev/cpg-common/$IMAGE_TAG" \
   --dataset "fewgenomes" \
   --description "cpg-flow_test" \
   --access-level "test" \
