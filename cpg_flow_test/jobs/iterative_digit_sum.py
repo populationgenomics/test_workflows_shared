@@ -24,6 +24,7 @@ def iterative_digit_sum(
                 done
                 num=$sum
             done
+            num=$((num / 2))  # Divide by two
             echo $num
         }}
 
