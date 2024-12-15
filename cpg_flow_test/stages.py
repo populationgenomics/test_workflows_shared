@@ -54,7 +54,7 @@ class GeneratePrimes(SequencingGroupStage):
     def expected_outputs(self, sequencing_group: SequencingGroup) -> dict[str, Path | str]:
         return {
             'id_sum': sequencing_group.dataset.prefix() / WORKFLOW_FOLDER / f'{sequencing_group.id}_id_sum.txt',
-            'primes': sequencing_group.dataset.prefix() / WORKFLOW_FOLDER / f'{sequencing_group.id}_primes.json',
+            'primes': sequencing_group.dataset.prefix() / WORKFLOW_FOLDER / f'{sequencing_group.id}_primes.txt',
         }
 
     def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput | None:
@@ -82,17 +82,15 @@ class GeneratePrimes(SequencingGroupStage):
 class CumulativeCalc(SequencingGroupStage):
     def expected_outputs(self, sequencing_group: SequencingGroup):
         return {
-            'cumulative': sequencing_group.dataset.prefix()
-            / WORKFLOW_FOLDER
-            / f'{sequencing_group.id}_cumulative.json',
+            'cumulative': sequencing_group.dataset.prefix() / WORKFLOW_FOLDER / f'{sequencing_group.id}_cumulative.txt',
         }
 
     def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput | None:
-        input_json = inputs.as_path(sequencing_group, GeneratePrimes, 'primes')
+        input_txt = inputs.as_path(sequencing_group, GeneratePrimes, 'primes')
         b = get_batch()
 
         cumulative_calc_output_path = str(self.expected_outputs(sequencing_group).get('cumulative', ''))
-        job_cumulative_calc = cumulative_calc(b, sequencing_group, input_json, cumulative_calc_output_path)
+        job_cumulative_calc = cumulative_calc(b, sequencing_group, input_txt, cumulative_calc_output_path)
 
         jobs = [job_cumulative_calc]
 
