@@ -6,7 +6,6 @@ from cpg_flow.targets.multicohort import MultiCohort
 from cpg_flow.targets.sequencing_group import SequencingGroup
 from cpg_utils import Path
 from cpg_utils.hail_batch import get_batch
-
 from jobs import build_pyramid, cumulative_calc, filter_evens, first_n_primes, iterative_digit_sum
 
 """
