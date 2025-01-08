@@ -58,9 +58,9 @@ $ cd cpg_flow_test
 # Run the test with the bash script
 $ chmod +x run-test-workflow.sh
 
-# See the notes below on how to find a valid tag.
-# The default tag is cpg_flow:0.x.x
-$ ./run-test-workflow.sh --image-tag "cpg_flow:<tag_id>"
+# See the notes below on how to find a valid path/tag.
+# The default path is australia-southeast1-docker.pkg.dev/cpg-common/images/cpg_flow:0.1.0-alpha.14
+$ ./run-test-workflow.sh --image "australia-southeast1-docker.pkg.dev/cpg-common/images/cpg_flow:<tag_id>"
 ```
 
 
