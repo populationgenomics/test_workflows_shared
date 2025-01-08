@@ -1,30 +1,68 @@
 #!/bin/bash
 
-DEFAULT_IMAGE_TAG="images/cpg_flow:0.1.0-alpha.9"
+DEFAULT_IMAGE_REPOSITORY="australia-southeast1-docker.pkg.dev/cpg-common/images"
+IMAGE_TAG="cpg_flow:0.1.0-alpha.9"
+IMAGE_PATH="$DEFAULT_IMAGE_REPOSITORY/$IMAGE_TAG"
 
-# If there is a command line argument, use it as the image tag
-if [[ -n $1 ]]; then
-  echo "Using image tag: $1"
-  IMAGE_TAG=$1
-else
-  echo "Using default image tag: $DEFAULT_IMAGE_TAG"
-  IMAGE_TAG=$DEFAULT_IMAGE_TAG
+PATH_OVERRIDE=0
+
+for arg in "$@"; do
+  if [[ "$arg" == "--image-tag" ]]; then
+
+    PATH_OVERRIDE=1
+
+    IMAGE_TAG=$2
+
+    # Make sure the image tag is of the format <image>:<tag>
+    if [[ ! $IMAGE_TAG =~ ^[^:]+:[^:]+$ ]]; then
+      RED=$(tput setaf 1)
+      RESET=$(tput sgr0)
+      echo "${RED}Invalid tag: $IMAGE_TAG${RESET}"
+      echo "Usage: $0 [--image-tag <image>:<tag>]"
+      echo "e.g"
+      GREEN=$(tput setaf 2)
+      YELLOW=$(tput setaf 3)
+      echo "${GREEN}$0 --image-tag \"cpg_flow:0.1.0-alpha.9\"${RESET}"
+      echo "Valid tags can be found from the most recent ${YELLOW}cpg-flow${RESET} docker deployment runs on Github:"
+      echo "${YELLOW}https://github.com/populationgenomics/cpg-flow/actions/workflows/docker.yaml${RESET}"
+      exit 1
+    fi
+
+    IMAGE_PATH="$DEFAULT_IMAGE_REPOSITORY/$IMAGE_TAG"
+    echo "Using image path (img:tag): $IMAGE_PATH"
+    break
+  else
+    RED=$(tput setaf 1)
+    RESET=$(tput sgr0)
+    echo "${RED}Invalid argument: $arg${RESET}"
+    echo "Usage: $0 [--image-tag <image>:<tag>]"
+    echo "e.g"
+    GREEN=$(tput setaf 2)
+    echo "${GREEN}$0 --image-tag \"cpg_flow:0.1.0-alpha.9\"${RESET}"
+    exit 1
+  fi
+done
+
+if [ $PATH_OVERRIDE -eq 0 ]; then
+  echo "Using default image path (img:tag): $IMAGE_PATH"
 fi
 
 # Check for unstaged changes in the git repo
 if [[ -n $(git status -s) ]]; then
-  echo "There are unstaged changes in the git repo. Please commit or stash them before running this script."
+  RED=$(tput setaf 1)
+  RESET=$(tput sgr0)
+  echo "${RED}There are unstaged changes in the git repo. Please commit or stash them before running this script.${RESET}"
   exit 1
 fi
 
 # Check for uncommitted changes in the git repo
 if [[ -n $(git diff) ]]; then
-  echo "There are uncommitted changes in the git repo. Please commit or stash them before running this script."
+  echo "${RED}There are uncommitted changes in the git repo. Please commit or stash them before running this script.${RESET}"
   exit 1
 fi
 
 echo "analysis-runner
-  --image "australia-southeast1-docker.pkg.dev/cpg-common/$IMAGE_TAG"
+  --image "$IMAGE_PATH"
   --dataset "fewgenomes"
   --description "cpg-flow_test"
   --access-level "test"
@@ -33,7 +71,7 @@ echo "analysis-runner
   workflow.py"
 
 analysis-runner \
-  --image "australia-southeast1-docker.pkg.dev/cpg-common/$IMAGE_TAG" \
+  --image "$IMAGE_TAG" \
   --dataset "fewgenomes" \
   --description "cpg-flow_test" \
   --access-level "test" \
