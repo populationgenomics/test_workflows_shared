@@ -57,10 +57,20 @@ $ cd cpg_flow_test
 
 # Run the test with the bash script
 $ chmod +x run-test-workflow.sh
-$ ./run-test-workflow.sh
+
+# See the notes below on how to find a valid tag.
+# The default tag is cpg_flow:0.x.x
+$ ./run-test-workflow.sh --image-tag "cpg_flow:<tag_id>"
 ```
-> **Note**
-> You will need to have `analysis-runner` installed in your environment. See the [analysis-runner](https://github.com/populationgenomics/analysis-runner) for more information or install it with `pipx install analysis-runner`.
+
+
+> **Notes**
+>
+> * You will need to have `analysis-runner` installed in your environment. See the [analysis-runner](https://github.com/populationgenomics/analysis-runner) for more information or install it with `pipx install analysis-runner`.
+> * You will need a valid tag above, which you can find from the most recent [`cpg-flow` docker workflow](https://github.com/populationgenomics/cpg-flow/actions/workflows/docker.yaml) runs, under the `print docker tag` job of the workflow.
+
+
+You should receive a job url from the `analysis-runner` output, if the job was created successfully. This job should spin up additional jobs that can be found from the `/batches` page on Hail.
 
 ## Editing in an IDE
 

@@ -51,13 +51,13 @@ fi
 if [[ -n $(git status -s) ]]; then
   RED=$(tput setaf 1)
   RESET=$(tput sgr0)
-  echo "${RED}There are unstaged changes in the git repo. Please commit or stash them before running this script.${RESET}"
+  echo "${RED}Hail cannot read your unstaged changes and there are unstaged changes in the git repo. Please commit or stash them before running this script.${RESET}"
   exit 1
 fi
 
 # Check for uncommitted changes in the git repo
 if [[ -n $(git diff) ]]; then
-  echo "${RED}There are uncommitted changes in the git repo. Please commit or stash them before running this script.${RESET}"
+  echo "${RED}Hail cannot read your uncommitted changes and there are uncommitted changes in the git repo. Please commit or stash them before running this script.${RESET}"
   exit 1
 fi
 
