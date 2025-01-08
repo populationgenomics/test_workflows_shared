@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DEFAULT_IMAGE_REPOSITORY="australia-southeast1-docker.pkg.dev/cpg-common/images"
+DEFAULT_IMAGE_REPOSITORY="australia-southeast1-docker.pkg.dev/cpg-common/images-tmp"
 IMAGE_TAG="cpg_flow:0.1.0-alpha.9"
 IMAGE_PATH="$DEFAULT_IMAGE_REPOSITORY/$IMAGE_TAG"
 
