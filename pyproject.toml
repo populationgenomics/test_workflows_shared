@@ -4,17 +4,20 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10,<3.11"
-dependencies = [
- "cpg-utils>=5.1.1",
-]
+dependencies = ["cpg-utils>=5.1.1", "hail>=0.2.133"]
 
 [tool.uv]
-dev-dependencies = ["black>=24.10.0", "pip-audit>=2.7.3", "pre-commit>=4.0.1"]
+dev-dependencies = [
+    "black>=24.10.0",
+    "cpg-flow>=0.1.0a9",
+    "pip-audit>=2.7.3",
+    "pre-commit>=4.0.1",
+]
 
 [tool.uv.sources]
 
 [project.urls]
-Repository = "https://github.com/populationgenomics/cpg-flow"
+Repository = "https://github.com/populationgenomics/test_workflows_shared"
 
 [tool.ruff]
 line-length = 120
@@ -65,51 +68,9 @@ select = [
     "YTT",
 ]
 
-fixable = [
-    "A",
-    "B",
-    "C",
-    "D",
-    "E",
-    "F",
-    "G",
-    "I",
-    "N",
-    "Q",
-    "S",
-    "T",
-    "W",
-    "ANN",
-    "ARG",
-    "BLE",
-    "COM",
-    "DJ",
-    "DTZ",
-    "ERA",
-    "EXE",
-    "FBT",
-    "ICN",
-    "ISC",
-    "NPY",
-    "PD",
-    "PGH",
-    "PIE",
-    "PL",
-    "PYI",
-    "RET",
-    "RSE",
-    "RUF",
-    "SIM",
-    "SLF",
-    "TCH",
-    "TID",
-    "UP",
-    "YTT",
-]
+fixable = ["ALL"]
 
 ignore = [
-    "ANN101",  # Missing type annotation for self in method
-    "ANN102",  # Missing type annotation for `cls` in classmethod
     "ANN201",  # Missing return type annotation for public function
     "ANN204",  # Missing type annotation for special method `__init__`
     "ANN401",  # Dynamically typed expressions (typing.Any) are disallowed in `**kwargs`
@@ -234,7 +195,6 @@ ignore = [
     "PD003",
     "SIM117",
     "RUF002",
-    "UP027",
     "SIM105",
     "E713",
     "S324",

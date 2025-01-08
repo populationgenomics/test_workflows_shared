@@ -16,14 +16,14 @@ repos:
       - id: check-added-large-files
 
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.42.0
+    rev: v0.43.0
     hooks:
       - id: markdownlint
         args: [-s, .markdownlint.json]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
-    rev: v0.7.3
+    rev: v0.8.3
     hooks:
       - id: ruff
         name: ruff (format)
@@ -42,7 +42,7 @@ repos:
             --install-types,
             --non-interactive,
           ]
-        additional_dependencies: [types-PyYAML==6.0.4, types-toml]
+        additional_dependencies: [mypy, types-PyYAML==6.0.4, types-toml, types-requests]
 
   - repo: https://github.com/opensource-nepal/commitlint
     rev: v1.3.0
