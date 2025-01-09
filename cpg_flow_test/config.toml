@@ -1,4 +1,5 @@
 [workflow]
+show_workflow = true
 dataset = 'fewgenomes'
 
 # Note: for fewgenomes and sandbox mentioning datasets by name is not a security risk
