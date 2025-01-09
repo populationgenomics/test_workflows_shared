@@ -23,8 +23,17 @@ if [[ -n $(git diff) ]]; then
   exit 1
 fi
 
+# Check that the docker image can be pulled
+IMAGE="australia-southeast1-docker.pkg.dev/cpg-common/$IMAGE_TAG"
+if [ docker pull "$IMAGE" ]; then
+  echo "Docker image exists"
+else
+  echo "Could not pull image $IMAGE"
+  exit 1
+fi
+
 echo "analysis-runner
-  --image "australia-southeast1-docker.pkg.dev/cpg-common/$IMAGE_TAG"
+  --image "$IMAGE"
   --dataset "fewgenomes"
   --description "cpg-flow_test"
   --access-level "test"
@@ -33,7 +42,7 @@ echo "analysis-runner
   workflow.py"
 
 analysis-runner \
-  --image "australia-southeast1-docker.pkg.dev/cpg-common/$IMAGE_TAG" \
+  --image "$IMAGE" \
   --dataset "fewgenomes" \
   --description "cpg-flow_test" \
   --access-level "test" \
