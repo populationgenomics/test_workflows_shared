@@ -30,6 +30,10 @@ if which docker && docker manifest inspect "$IMAGE" > /dev/null 2>&1; then
 elif ! which docker; then
   echo "Docker is not installed. Skipping image check."
 else
+  # Continue if sigkill is received
+  if [[ $? -eq 137 ]]; then
+    echo "Docker is not working. Skipping image check."
+  fi
   echo "Docker image $IMAGE does not exist. Please build the image before running this script."
   exit 1
 fi
