@@ -77,7 +77,7 @@ $ chmod +x run-test-workflow.sh
 # The default path is australia-southeast1-docker.pkg.dev/cpg-common/images/cpg_flow:0.1.0-alpha.14
 $ ./run-test-workflow.sh --image "australia-southeast1-docker.pkg.dev/cpg-common/images/cpg_flow:<tag_id>"
 ```
-You should receive a job url from the `analysis-runner` output, if the job was created successfully. This job should spin up additional jobs that can be found from the `/batches` page on Hail.
+If the job is successfully created, the analysis-runner output will include a job URL. This driver job will trigger additional jobs, which can be monitored via the /batches page on Hail. Monitoring these jobs helps verify that the workflow ran successfully. When all expected jobs complete without errors, this confirms the successful execution of the test workflow and indicates that the cpg_flow package is functioning as intended.
 
 ### Notes
 
