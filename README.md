@@ -34,9 +34,17 @@
 
 ## Background
 
-The first release of `cpg-flow` inspired us to introduce better naming conventions, and improved structure of our code. With multiple pipelines using `cpg-flow`, it was important to standardise these attributes, and thus this repository was created as a standard template to follow when designing your pipeline.
+The tests_workflows_shared repository serves as a dedicated testing space for both cpg_flow and pipeline developers. It is designed to facilitate manual, integrated end-to-end (E2E) validation of the cpg_flow package, ensuring its robustness and reliability in production-like environments. By interfacing with Metamist and leveraging a cohort from the fewgenomes project, the repository enables  testing of new builds and modifications before deployment.
 
-`test_workflows_shared` adheres to the CPG Pipeline naming convention, use of utility tools like `renovate` for package upgrades, `uv` for dependency management, and a standardised code structure.
+For pipeline developers who are new to cpg_flow, this repository provides a practical trial workflow, offering a hands-on introduction to its core functionalities and best practices. This dual-purpose approach not only supports continuous improvement of cpg_flow but also accelerates onboarding and skill development for new contributors.
+
+Beyond its primary focus on testing, the repository promotes standardization through:
+
+- Enforcement of consistent naming conventions aligned with CPG standards.
+- Automated package and dependency updates using Renovate.
+- Dependency management facilitated by uv.
+
+By combining rigorous testing capabilities with a standardised development framework, tests_workflows_shared ensures high-quality pipeline development and fosters a cohesive developer experience.
 
 ## Key Features
 
