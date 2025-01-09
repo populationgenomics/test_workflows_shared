@@ -82,7 +82,7 @@ sdist = { url = "https://files.pythonhosted.org/packages/89/a0/23ee7a48da5ed8c34
 
 [[package]]
 name = "anyio"
-version = "4.7.0"
+version = "4.8.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "exceptiongroup" },
@@ -90,9 +90,9 @@ dependencies = [
     { name = "sniffio" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f6/40/318e58f669b1a9e00f5c4453910682e2d9dd594334539c7b7817dabb765f/anyio-4.7.0.tar.gz", hash = "sha256:2f834749c602966b7d456a7567cafcb309f96482b5081d14ac93ccd457f9dd48", size = 177076 }
+sdist = { url = "https://files.pythonhosted.org/packages/a3/73/199a98fc2dae33535d6b8e8e6ec01f8c1d76c9adb096c6b7d64823038cde/anyio-4.8.0.tar.gz", hash = "sha256:1d9fe889df5212298c0c0723fa20479d1b94883a2df44bd3897aa91083316f7a", size = 181126 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a0/7a/4daaf3b6c08ad7ceffea4634ec206faeff697526421c20f07628c7372156/anyio-4.7.0-py3-none-any.whl", hash = "sha256:ea60c3723ab42ba6fff7e8ccb0488c898ec538ff4df1f1d5e642c3601d07e352", size = 93052 },
+    { url = "https://files.pythonhosted.org/packages/46/eb/e7f063ad1fec6b3178a3cd82d1a3c4de82cccf283fc42746168188e1cdd5/anyio-4.8.0-py3-none-any.whl", hash = "sha256:b5011f270ab5eb0abf13385f851315585cc37ef330dd88e27ec3d34d651fd47a", size = 96041 },
 ]
 
 [[package]]
@@ -436,6 +436,18 @@ wheels = [
 ]
 
 [[package]]
+name = "coloredlogs"
+version = "15.0.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "humanfriendly" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/cc/c7/eed8f27100517e8c0e6b923d5f0845d0cb99763da6fdee00478f91db7325/coloredlogs-15.0.1.tar.gz", hash = "sha256:7c991aa71a4577af2f82600d8f8f3a89f936baeaf9b50a9c197da014e5bf16b0", size = 278520 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/a7/06/3d6badcf13db419e25b07041d9c7b4a2c331d3f4e7134445ec5df57714cd/coloredlogs-15.0.1-py2.py3-none-any.whl", hash = "sha256:612ee75c546f53e92e70049c9dbfcc18c935a2b9a53b66085ce9ef6a6e5c0934", size = 46018 },
+]
+
+[[package]]
 name = "commonmark"
 version = "0.9.1"
 source = { registry = "https://pypi.org/simple" }
@@ -470,19 +482,21 @@ wheels = [
 
 [[package]]
 name = "cpg-flow"
-version = "0.1.0a11"
+version = "0.1.0a14"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
+    { name = "coloredlogs" },
     { name = "cpg-utils" },
     { name = "grpcio" },
     { name = "grpcio-status" },
     { name = "hail" },
     { name = "metamist" },
     { name = "networkx" },
+    { name = "pyyaml" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/2c/9c/1aca2199a21f0105e1ed6cbf3c2281e27e626266cde971b387dd4147470b/cpg_flow-0.1.0a11.tar.gz", hash = "sha256:6c74a8d28c7c6852a19058fd1c7f06790a85d1b0c597de50227d9f7a727a9eab", size = 992416 }
+sdist = { url = "https://files.pythonhosted.org/packages/93/ae/ff91f988dabeb008cb7f7c004576aaf4420b2c1d9aa6c1e04c6251f42104/cpg_flow-0.1.0a14.tar.gz", hash = "sha256:5ab187839ec005c9417e7d0b21542dbe2eeffa380f349e241a789f6b0bb2cdbb", size = 1330359 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/47/28/0d1dcc79cc614ffab846055ae1062fb3b787a385e7fc2a8fa88d4f3e249f/cpg_flow-0.1.0a11-py3-none-any.whl", hash = "sha256:91e4d668c8ac669d0542ee17fe304b19b2d72d7a70415097e49ba6a816cb0c60", size = 59486 },
+    { url = "https://files.pythonhosted.org/packages/14/37/65ccde2e6104162ac191c2469f61d7ec8ad98cecd9f5554c9bf27aafe4f6/cpg_flow-0.1.0a14-py3-none-any.whl", hash = "sha256:17c356784879aa236e824a72c4feb53e44eca4455835b66835cb03a4b3a84083", size = 59499 },
 ]
 
 [[package]]
@@ -938,6 +952,18 @@ wheels = [
 ]
 
 [[package]]
+name = "humanfriendly"
+version = "10.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pyreadline3", marker = "sys_platform == 'win32'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/cc/3f/2c29224acb2e2df4d2046e4c73ee2662023c58ff5b113c4c1adac0886c43/humanfriendly-10.0.tar.gz", hash = "sha256:6b0b831ce8f15f7300721aa49829fc4e83921a9a301cc7f606be6686a2288ddc", size = 360702 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/f0/0f/310fb31e39e2d734ccaa2c0fb981ee41f7bd5056ce9bc29b2248bd569169/humanfriendly-10.0-py2.py3-none-any.whl", hash = "sha256:1697e1a8a8f550fd43c2865cd84542fc175a61dcb779b6fee18cf6b6ccba1477", size = 86794 },
+]
+
+[[package]]
 name = "humanize"
 version = "4.11.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1050,7 +1076,7 @@ wheels = [
 
 [[package]]
 name = "metamist"
-version = "7.5.1"
+version = "7.6.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "backoff" },
@@ -1062,10 +1088,9 @@ dependencies = [
     { name = "python-dateutil" },
     { name = "requests" },
     { name = "tabulate" },
-    { name = "typing-extensions" },
     { name = "urllib3" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/9b/4f/f7aaa6e97c1db0c1b770217fbf0ed85ecc782743f141a45c055d61eed661/metamist-7.5.1.tar.gz", hash = "sha256:d5fe76061874153121dbd44fe539c718076476da58a1d8a4fffb50e47ddb6ac2", size = 209930 }
+sdist = { url = "https://files.pythonhosted.org/packages/05/28/d09d1d1f5c8fd960d5e70491cbccce273847f4d913667f0739be123da211/metamist-7.6.0.tar.gz", hash = "sha256:cb0f4fe350d87fe65171b2b7ab6e20e3c1e98488a565a5d1a861ffb8923a761c", size = 215995 }
 
 [[package]]
 name = "msal"
@@ -1587,6 +1612,15 @@ wheels = [
 ]
 
 [[package]]
+name = "pyreadline3"
+version = "3.5.4"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/0f/49/4cea918a08f02817aabae639e3d0ac046fef9f9180518a3ad394e22da148/pyreadline3-3.5.4.tar.gz", hash = "sha256:8d57d53039a1c75adba8e50dd3d992b28143480816187ea5efbd5c78e6c885b7", size = 99839 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/5a/dc/491b7661614ab97483abf2056be1deee4dc2490ecbf7bff9ab5cdbac86e1/pyreadline3-3.5.4-py3-none-any.whl", hash = "sha256:eaf8e6cc3c49bcccf145fc6067ba8643d1df34d604a1ec0eccbf7a18e6d3fae6", size = 83178 },
+]
+
+[[package]]
 name = "pyspark"
 version = "3.5.3"
 source = { registry = "https://pypi.org/simple" }
@@ -1844,7 +1878,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "analysis-runner" },
+    { name = "analysis-runner", specifier = ">=3.2.0" },
     { name = "cpg-utils", specifier = ">=5.1.1" },
     { name = "hail", specifier = ">=0.2.133" },
 ]
@@ -1852,7 +1886,7 @@ requires-dist = [
 [package.metadata.requires-dev]
 dev = [
     { name = "black", specifier = ">=24.10.0" },
-    { name = "cpg-flow", specifier = ">=0.1.0a9" },
+    { name = "cpg-flow" },
     { name = "pip-audit", specifier = ">=2.7.3" },
     { name = "pre-commit", specifier = ">=4.0.1" },
 ]
