@@ -81,8 +81,9 @@ If the job is successfully created, the analysis-runner output will include a jo
 
 ### Notes
 
-* Having the option to run this pipeline on different tags of the `cpg_flow` image, is valuable for testing unmerged functionality in the `cpg_flow` repository. You can always default to a recent release tag to test with a stable version of the  `cpg_flow` image.
-* You will need a valid tag above, which you can find from the most recent [`cpg-flow` docker workflow](https://github.com/populationgenomics/cpg-flow/actions/workflows/docker.yaml) runs, under the `print docker tag` job of the workflow. Be mindful of the use of `images` vs `images-tmp` which usually contains test images that are pruned fortnightly.
+* **Testing with Different Image Tags**: Running the pipeline on different tags of the cpg_flow image is valuable for validating unmerged functionality in the cpg_flow repository. To ensure stability, you can default to a recent release tag when testing with a stable version of the cpg_flow image.
+
+* **Finding a Valid Tag**: A valid tag can be obtained from the most recent [cpg-flow](https://github.com/populationgenomics/cpg-flow/actions/workflows/docker.yaml)[ Docker workflow](https://github.com/populationgenomics/cpg-flow/actions/workflows/docker.yaml) runs. Look under the print docker tag job of the workflow. Be mindful of the distinction between images (stable) and images-tmp (test images pruned fortnightly).
 * You will need to have `analysis-runner` installed in your environment. See the [analysis-runner](https://github.com/populationgenomics/analysis-runner) for more information or install it with `pipx install analysis-runner`.
 
 ## Editing in an IDE
