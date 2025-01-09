@@ -76,15 +76,20 @@ $ chmod +x run-test-workflow.sh
 # See the notes below on how to find a valid path/tag.
 # The default path is australia-southeast1-docker.pkg.dev/cpg-common/images/cpg_flow:0.1.0-alpha.14
 $ ./run-test-workflow.sh --image "australia-southeast1-docker.pkg.dev/cpg-common/images/cpg_flow:<tag_id>"
+
+
 ```
+
 If the job is successfully created, the analysis-runner output will include a job URL. This driver job will trigger additional jobs, which can be monitored via the /batches page on Hail. Monitoring these jobs helps verify that the workflow ran successfully. When all expected jobs complete without errors, this confirms the successful execution of the test workflow and indicates that the cpg_flow package is functioning as intended.
 
 ### Notes
 
-* **Testing with Different Image Tags**: Running the pipeline on different tags of the cpg_flow image is valuable for validating unmerged functionality in the cpg_flow repository. To ensure stability, you can default to a recent release tag when testing with a stable version of the cpg_flow image.
+- You will need to have `analysis-runner` installed in your environment. See the [analysis-runner](https://github.com/populationgenomics/analysis-runner) for more information or install it with `pipx install analysis-runner`.
 
-* **Finding a Valid Tag**: A valid tag can be obtained from the most recent [cpg-flow](https://github.com/populationgenomics/cpg-flow/actions/workflows/docker.yaml)[ Docker workflow](https://github.com/populationgenomics/cpg-flow/actions/workflows/docker.yaml) runs. Look under the print docker tag job of the workflow. Be mindful of the distinction between images (stable) and images-tmp (test images pruned fortnightly).
-* You will need to have `analysis-runner` installed in your environment. See the [analysis-runner](https://github.com/populationgenomics/analysis-runner) for more information or install it with `pipx install analysis-runner`.
+- **Testing with Different Image Tags**: Running the pipeline on different tags of the cpg_flow image is valuable for validating unmerged functionality in the cpg_flow repository. To ensure stability, you can default to a recent release tag when testing with a stable version of the cpg_flow image.
+
+- **Finding a Valid Tag**: A valid tag can be obtained from the most recent [cpg-flow](https://github.com/populationgenomics/cpg-flow/actions/workflows/docker.yaml)[Docker workflow](https://github.com/populationgenomics/cpg-flow/actions/workflows/docker.yaml) runs. Look under the print docker tag job of the workflow. Be mindful of the distinction between images (stable) and images-tmp (test images pruned fortnightly).
+
 
 ## Editing in an IDE
 
