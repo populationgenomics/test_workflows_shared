@@ -24,6 +24,7 @@
 </p>
 
 <p align="center">
+  <a href="#background">Background</a> •
   <a href="#key-features">Key Features</a> •
   <a href="#how-to-use">How To Use</a> •
   <a href="#editing-in-an-ide">Editing in an IDE</a> •
@@ -31,10 +32,17 @@
   <a href="#license">License</a>
 </p>
 
+## Background
+Could we add a little extra clarity in the readme in terms of the purpose of what this repo allows you to test (for example why you'd want to pull a particular image tag? e.g. to test a dev build of cpg_flow)
+
+The first release of `cpg-flow` inspired us to introduce better naming conventions, and improved structure of our code. With multiple pipelines using `cpg-flow`, it was important to standardise these attributes, and thus this repository was created as a standard template to follow when designing your pipeline.
+
+`test_workflows_shared` adheres to the CPG Pipeline naming convention, use of utility tools like `renovate` for package upgrades, `uv` for dependency management, and a standardised code structure.
 
 ## Key Features
 
 * Uses `uv` to manage dependencies
+* Uses `renovate` for package upgrades
 * Uses `analysis-runner` to run the test workflow
 * The `jobs` and `stages` are defined in separate files:
   * The `cpg_flow_test/jobs/` directory contains the job definitions that can be reused across stages.
@@ -62,15 +70,13 @@ $ chmod +x run-test-workflow.sh
 # The default path is australia-southeast1-docker.pkg.dev/cpg-common/images/cpg_flow:0.1.0-alpha.14
 $ ./run-test-workflow.sh --image "australia-southeast1-docker.pkg.dev/cpg-common/images/cpg_flow:<tag_id>"
 ```
-
-
-> **Notes**
->
-> * You will need to have `analysis-runner` installed in your environment. See the [analysis-runner](https://github.com/populationgenomics/analysis-runner) for more information or install it with `pipx install analysis-runner`.
-> * You will need a valid tag above, which you can find from the most recent [`cpg-flow` docker workflow](https://github.com/populationgenomics/cpg-flow/actions/workflows/docker.yaml) runs, under the `print docker tag` job of the workflow.
-
-
 You should receive a job url from the `analysis-runner` output, if the job was created successfully. This job should spin up additional jobs that can be found from the `/batches` page on Hail.
+
+### Notes
+
+* Having the option to run this pipeline on different tags of the `cpg_flow` image, is valuable for testing unmerged functionality in the `cpg_flow` repository. You can always default to a recent release tag to test with a stable version of the  `cpg_flow` image.
+* You will need a valid tag above, which you can find from the most recent [`cpg-flow` docker workflow](https://github.com/populationgenomics/cpg-flow/actions/workflows/docker.yaml) runs, under the `print docker tag` job of the workflow. Be mindful of the use of `images` vs `images-tmp` which usually contains test images that are pruned fortnightly.
+* You will need to have `analysis-runner` installed in your environment. See the [analysis-runner](https://github.com/populationgenomics/analysis-runner) for more information or install it with `pipx install analysis-runner`.
 
 ## Editing in an IDE
 
