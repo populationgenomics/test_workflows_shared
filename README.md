@@ -33,11 +33,18 @@
 </p>
 
 ## Background
-Could we add a little extra clarity in the readme in terms of the purpose of what this repo allows you to test (for example why you'd want to pull a particular image tag? e.g. to test a dev build of cpg_flow)
 
-The first release of `cpg-flow` inspired us to introduce better naming conventions, and improved structure of our code. With multiple pipelines using `cpg-flow`, it was important to standardise these attributes, and thus this repository was created as a standard template to follow when designing your pipeline.
+The tests_workflows_shared repository serves as a dedicated testing space for both cpg_flow and pipeline developers. It is designed to facilitate manual, integrated end-to-end (E2E) validation of the cpg_flow package, ensuring its robustness and reliability in production-like environments. By interfacing with Metamist and leveraging a cohort from the fewgenomes project, the repository enables  testing of new builds and modifications before deployment.
 
-`test_workflows_shared` adheres to the CPG Pipeline naming convention, use of utility tools like `renovate` for package upgrades, `uv` for dependency management, and a standardised code structure.
+For pipeline developers who are new to cpg_flow, this repository provides a practical trial workflow, offering a hands-on introduction to its core functionalities and best practices. This dual-purpose approach not only supports continuous improvement of cpg_flow but also accelerates onboarding and skill development for new contributors.
+
+Beyond its primary focus on testing, the repository promotes standardization through:
+
+- Enforcement of consistent naming conventions aligned with CPG standards.
+- Automated package and dependency updates using Renovate.
+- Dependency management facilitated by uv.
+
+By combining rigorous testing capabilities with a standardised development framework, tests_workflows_shared ensures high-quality pipeline development and fosters a cohesive developer experience.
 
 ## Key Features
 
@@ -70,12 +77,13 @@ $ chmod +x run-test-workflow.sh
 # The default path is australia-southeast1-docker.pkg.dev/cpg-common/images/cpg_flow:0.1.0-alpha.14
 $ ./run-test-workflow.sh --image "australia-southeast1-docker.pkg.dev/cpg-common/images/cpg_flow:<tag_id>"
 ```
-You should receive a job url from the `analysis-runner` output, if the job was created successfully. This job should spin up additional jobs that can be found from the `/batches` page on Hail.
+If the job is successfully created, the analysis-runner output will include a job URL. This driver job will trigger additional jobs, which can be monitored via the /batches page on Hail. Monitoring these jobs helps verify that the workflow ran successfully. When all expected jobs complete without errors, this confirms the successful execution of the test workflow and indicates that the cpg_flow package is functioning as intended.
 
 ### Notes
 
-* Having the option to run this pipeline on different tags of the `cpg_flow` image, is valuable for testing unmerged functionality in the `cpg_flow` repository. You can always default to a recent release tag to test with a stable version of the  `cpg_flow` image.
-* You will need a valid tag above, which you can find from the most recent [`cpg-flow` docker workflow](https://github.com/populationgenomics/cpg-flow/actions/workflows/docker.yaml) runs, under the `print docker tag` job of the workflow. Be mindful of the use of `images` vs `images-tmp` which usually contains test images that are pruned fortnightly.
+* **Testing with Different Image Tags**: Running the pipeline on different tags of the cpg_flow image is valuable for validating unmerged functionality in the cpg_flow repository. To ensure stability, you can default to a recent release tag when testing with a stable version of the cpg_flow image.
+
+* **Finding a Valid Tag**: A valid tag can be obtained from the most recent [cpg-flow](https://github.com/populationgenomics/cpg-flow/actions/workflows/docker.yaml)[ Docker workflow](https://github.com/populationgenomics/cpg-flow/actions/workflows/docker.yaml) runs. Look under the print docker tag job of the workflow. Be mindful of the distinction between images (stable) and images-tmp (test images pruned fortnightly).
 * You will need to have `analysis-runner` installed in your environment. See the [analysis-runner](https://github.com/populationgenomics/analysis-runner) for more information or install it with `pipx install analysis-runner`.
 
 ## Editing in an IDE
