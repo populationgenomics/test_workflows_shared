@@ -4,7 +4,11 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10,<3.11"
-dependencies = ["cpg-utils>=5.1.1", "hail>=0.2.133"]
+dependencies = [
+    "analysis-runner>=3.2.0",
+    "cpg-utils>=5.1.1",
+    "hail>=0.2.133",
+]
 
 [tool.uv]
 dev-dependencies = [
