@@ -19,6 +19,9 @@ force_stages = [
     'BuildAPrimePyramid',
 ]
 
+first_stages = ['CumulativeCalc']
+last_stages = ['FilterEvens']
+
 status_reporter = 'metamist'
 
 # Cohorts to use as inputs.
