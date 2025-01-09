@@ -33,7 +33,6 @@
 </p>
 
 ## Background
-Could we add a little extra clarity in the readme in terms of the purpose of what this repo allows you to test (for example why you'd want to pull a particular image tag? e.g. to test a dev build of cpg_flow)
 
 The first release of `cpg-flow` inspired us to introduce better naming conventions, and improved structure of our code. With multiple pipelines using `cpg-flow`, it was important to standardise these attributes, and thus this repository was created as a standard template to follow when designing your pipeline.
 
