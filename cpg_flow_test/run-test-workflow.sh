@@ -25,7 +25,7 @@ fi
 
 # Check that the docker image can be pulled
 IMAGE="australia-southeast1-docker.pkg.dev/cpg-common/$IMAGE_TAG"
-if [ docker pull "$IMAGE" ]; then
+if [[ docker pull "$IMAGE" ]]; then
   echo "Docker image exists"
 else
   echo "Could not pull image $IMAGE"
