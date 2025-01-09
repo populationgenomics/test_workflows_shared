@@ -25,8 +25,11 @@ fi
 
 # Check that the docker image can be pulled
 IMAGE="australia-southeast1-docker.pkg.dev/cpg-common/$IMAGE_TAG"
-if docker manifest inspect "$IMAGE" > /dev/null 2>&1; then
+if which docker && docker manifest inspect "$IMAGE" > /dev/null 2>&1; then
   echo "Docker image $IMAGE exists."
+elif ! which docker
+then
+  echo "Docker is not installed. Skipping image check."
 else
   echo "Docker image $IMAGE does not exist. Please build the image before running this script."
   exit 1
