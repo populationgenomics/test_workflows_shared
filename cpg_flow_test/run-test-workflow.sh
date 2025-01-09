@@ -25,17 +25,19 @@ fi
 
 # Check that the docker image can be pulled
 IMAGE="australia-southeast1-docker.pkg.dev/cpg-common/$IMAGE_TAG"
-if which docker && docker manifest inspect "$IMAGE" > /dev/null 2>&1; then
-  echo "Docker image $IMAGE exists."
-elif ! which docker; then
-  echo "Docker is not installed. Skipping image check."
-else
-  # Continue if sigkill is received
-  if [[ $? -eq 137 ]]; then
-    echo "Docker is not working. Skipping image check."
+if which docker; then
+  if docker manifest inspect "$IMAGE" > /dev/null 2>&1; then
+    echo "Docker image $IMAGE exists."
+  else
+    if [[ $? -eq 137 ]]; then
+      echo "Docker command was killed. Skipping image check."
+    else
+      echo "Docker image $IMAGE does not exist. Please build the image before running this script."
+      exit 1
+    fi
   fi
-  echo "Docker image $IMAGE does not exist. Please build the image before running this script."
-  exit 1
+else
+  echo "Docker is not installed. Skipping image check."
 fi
 
 echo "analysis-runner
