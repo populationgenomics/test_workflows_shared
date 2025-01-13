@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any  # noqa: I001
 
 from cpg_flow.stage import CohortStage, MultiCohortStage, SequencingGroupStage, StageInput, StageOutput, stage
 from cpg_flow.targets.cohort import Cohort
