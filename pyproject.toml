@@ -5,7 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10,<3.11"
 dependencies = [
-    "analysis-runner>=3.2.0",
+    "analysis-runner>=3.2.1",
     "cpg-utils>=5.1.1",
     "hail>=0.2.133",
 ]

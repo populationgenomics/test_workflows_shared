@@ -69,7 +69,7 @@ wheels = [
 
 [[package]]
 name = "analysis-runner"
-version = "3.2.0"
+version = "3.2.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cloudpathlib", extra = ["all"] },
@@ -78,7 +78,7 @@ dependencies = [
     { name = "requests" },
     { name = "tabulate" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/89/a0/23ee7a48da5ed8c341d9706cc597b15b46015527fd3d4ab3bb017a5a622f/analysis-runner-3.2.0.tar.gz", hash = "sha256:00d327e4c79f992a893ec9bb5d15d48f290679b2c4cc59ea01934f5ba77c524b", size = 19229 }
+sdist = { url = "https://files.pythonhosted.org/packages/5b/70/a0869abca690fe034d220ec80323e329eca70ed156af546fdd29983a02e3/analysis-runner-3.2.1.tar.gz", hash = "sha256:36fd2a66419efb56fd18e24212de1c31ad6403b1959f320b6a317563d41dce02", size = 19253 }
 
 [[package]]
 name = "anyio"
@@ -503,7 +503,7 @@ wheels = [
 
 [[package]]
 name = "cpg-flow"
-version = "0.1.0a14+g837d6ba9"
+version = "0.1.0a14+gdef1d031"
 source = { editable = "../cpg-flow" }
 dependencies = [
     { name = "coloredlogs" },
@@ -2076,7 +2076,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "analysis-runner", specifier = ">=3.2.0" },
+    { name = "analysis-runner" },
     { name = "cpg-utils", specifier = ">=5.1.1" },
     { name = "hail", specifier = ">=0.2.133" },
 ]
