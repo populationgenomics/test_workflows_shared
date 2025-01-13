@@ -1,38 +1,73 @@
 #!/bin/bash
 
-DEFAULT_IMAGE_TAG="images/cpg_flow:0.1.0-alpha.9"
+DEFAULT_IMAGE_REPOSITORY="australia-southeast1-docker.pkg.dev/cpg-common/images"
+IMAGE_TAG="cpg_flow:0.1.0-alpha.14"
+IMAGE_PATH="$DEFAULT_IMAGE_REPOSITORY/$IMAGE_TAG"
 
-# If there is a command line argument, use it as the image tag
-if [[ -n $1 ]]; then
-  echo "Using image tag: $1"
-  IMAGE_TAG=$1
-else
-  echo "Using default image tag: $DEFAULT_IMAGE_TAG"
-  IMAGE_TAG=$DEFAULT_IMAGE_TAG
+PATH_OVERRIDE=0
+
+for arg in "$@"; do
+  if [[ "$arg" == "--image" ]]; then
+
+    PATH_OVERRIDE=1
+
+    IMAGE_PATH=$2
+
+    # Make sure the image tag is of the format <image>:<tag>
+    if [[ ! $IMAGE_PATH =~ ^[^:]+:[^:]+$ ]]; then
+      RED=$(tput setaf 1)
+      RESET=$(tput sgr0)
+      echo "${RED}Invalid path/tag: $IMAGE_PATH${RESET}"
+      echo "Usage: $0 [--image <image_repo_url>:<tag>]"
+      echo "e.g"
+      GREEN=$(tput setaf 2)
+      YELLOW=$(tput setaf 3)
+      echo "${GREEN}$0 --image \"cpg_flow:0.1.0-alpha.14\"${RESET}"
+      echo "Valid tags can be found from the most recent ${YELLOW}cpg-flow${RESET} docker deployment runs on Github:"
+      echo "${YELLOW}https://github.com/populationgenomics/cpg-flow/actions/workflows/docker.yaml${RESET}"
+      exit 1
+    fi
+    echo "Using image path (img:tag): $IMAGE_PATH"
+    break
+  else
+    RED=$(tput setaf 1)
+    RESET=$(tput sgr0)
+    echo "${RED}Invalid argument: $arg${RESET}"
+    echo "Usage: $0 [--image <image_repo_url>:<tag>]"
+    echo "e.g"
+    GREEN=$(tput setaf 2)
+    echo "${GREEN}$0 --image-tag \"cpg_flow:0.1.0-alpha.9\"${RESET}"
+    exit 1
+  fi
+done
+
+if [ $PATH_OVERRIDE -eq 0 ]; then
+  echo "Using default image path (img:tag): $IMAGE_PATH"
 fi
 
-# Check for unstaged changes in the git repo
+Check for unstaged changes in the git repo
 if [[ -n $(git status -s) ]]; then
-  echo "There are unstaged changes in the git repo. Please commit or stash them before running this script."
+  RED=$(tput setaf 1)
+  RESET=$(tput sgr0)
+  echo "${RED}Hail cannot read your unstaged changes and there are unstaged changes in the git repo. Please commit or stash them before running this script.${RESET}"
   exit 1
 fi
 
 # Check for uncommitted changes in the git repo
 if [[ -n $(git diff) ]]; then
-  echo "There are uncommitted changes in the git repo. Please commit or stash them before running this script."
+  echo "${RED}Hail cannot read your uncommitted changes and there are uncommitted changes in the git repo. Please commit or stash them before running this script.${RESET}"
   exit 1
 fi
 
 # Check that the docker image can be pulled
-IMAGE="australia-southeast1-docker.pkg.dev/cpg-common/$IMAGE_TAG"
 if which docker; then
-  if docker manifest inspect "$IMAGE" > /dev/null 2>&1; then
-    echo "Docker image $IMAGE exists."
+  if docker manifest inspect "$IMAGE_PATH" > /dev/null 2>&1; then
+    echo "Docker image $IMAGE_PATH exists."
   else
     if [[ $? -eq 137 ]]; then
       echo "Docker command was killed. Skipping image check."
     else
-      echo "Docker image $IMAGE does not exist. Please build the image before running this script."
+      echo "Docker image $IMAGE_PATH does not exist. Please build the image before running this script."
       exit 1
     fi
   fi
@@ -41,7 +76,7 @@ else
 fi
 
 echo "analysis-runner
-  --image "$IMAGE"
+  --image "$IMAGE_PATH"
   --dataset "fewgenomes"
   --description "cpg-flow_test"
   --access-level "test"
@@ -50,7 +85,7 @@ echo "analysis-runner
   workflow.py"
 
 analysis-runner \
-  --image "$IMAGE" \
+  --image "$IMAGE_PATH" \
   --dataset "fewgenomes" \
   --description "cpg-flow_test" \
   --access-level "test" \
