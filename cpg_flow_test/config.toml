@@ -19,8 +19,8 @@ force_stages = [
     'BuildAPrimePyramid',
 ]
 
-first_stages = ['CumulativeCalc']
-last_stages = ['FilterEvens']
+# first_stages = ['CumulativeCalc']
+# last_stages = ['FilterEvens']
 
 status_reporter = 'metamist'
 
