@@ -59,6 +59,22 @@ if [[ -n $(git diff) ]]; then
   exit 1
 fi
 
+# Check that the docker image can be pulled
+if which docker; then
+  if docker manifest inspect "$IMAGE_PATH" > /dev/null 2>&1; then
+    echo "Docker image $IMAGE_PATH exists."
+  else
+    if [[ $? -eq 137 ]]; then
+      echo "Docker command was killed. Skipping image check."
+    else
+      echo "Docker image $IMAGE_PATH does not exist. Please build the image before running this script."
+      exit 1
+    fi
+  fi
+else
+  echo "Docker is not installed. Skipping image check."
+fi
+
 echo "analysis-runner
   --image "$IMAGE_PATH"
   --dataset "fewgenomes"
