@@ -45,7 +45,7 @@ if [ $PATH_OVERRIDE -eq 0 ]; then
   echo "Using default image path (img:tag): $IMAGE_PATH"
 fi
 
-Check for unstaged changes in the git repo
+# Check for unstaged changes in the git repo
 if [[ -n $(git status -s) ]]; then
   RED=$(tput setaf 1)
   RESET=$(tput sgr0)

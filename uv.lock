@@ -69,7 +69,7 @@ wheels = [
 
 [[package]]
 name = "analysis-runner"
-version = "3.2.1"
+version = "3.2.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cloudpathlib", extra = ["all"] },
@@ -78,7 +78,7 @@ dependencies = [
     { name = "requests" },
     { name = "tabulate" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/5b/70/a0869abca690fe034d220ec80323e329eca70ed156af546fdd29983a02e3/analysis-runner-3.2.1.tar.gz", hash = "sha256:36fd2a66419efb56fd18e24212de1c31ad6403b1959f320b6a317563d41dce02", size = 19253 }
+sdist = { url = "https://files.pythonhosted.org/packages/d4/4e/d6da1e708946f504db71fc84d82c15be1cb3e34805f4b1c6cdb3aed752dd/analysis_runner-3.2.2.tar.gz", hash = "sha256:cc713994cfe84032747fbd58114377810e7a6935a763bb9973b29c96e9057f21", size = 19402 }
 
 [[package]]
 name = "async-timeout"
@@ -1711,7 +1711,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "analysis-runner", specifier = ">=3.2.1" },
+    { name = "analysis-runner" },
     { name = "cpg-utils", specifier = ">=5.1.1" },
     { name = "hail", specifier = ">=0.2.133" },
 ]
