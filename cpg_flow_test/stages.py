@@ -6,7 +6,7 @@ from cpg_flow.targets.multicohort import MultiCohort
 from cpg_flow.targets.sequencing_group import SequencingGroup
 from cpg_utils import Path
 from cpg_utils.hail_batch import get_batch
-from jobs import build_pyramid, cumulative_calc, filter_evens, first_n_primes, iterative_digit_sum
+from jobs import build_pyramid, cumulative_calc, filter_evens, first_n_primes, iterative_digit_sum, say_hi
 
 """
 Here's a fun programming task with four interdependent steps, using the concept of **prime numbers** and their relationships:
@@ -93,6 +93,28 @@ class CumulativeCalc(SequencingGroupStage):
         job_cumulative_calc = cumulative_calc(b, sequencing_group, input_txt, cumulative_calc_output_path)
 
         jobs = [job_cumulative_calc]
+
+        return self.make_outputs(
+            sequencing_group,
+            data=self.expected_outputs(sequencing_group),
+            jobs=jobs,
+        )
+
+
+@stage(required_stages=[GeneratePrimes], analysis_keys=['hello'], analysis_type='custom')
+class SayHi(SequencingGroupStage):
+    def expected_outputs(self, sequencing_group: SequencingGroup):
+        return {
+            'hello': sequencing_group.dataset.prefix() / WORKFLOW_FOLDER / f'{sequencing_group.id}_cumulative.txt',
+        }
+
+    def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput | None:
+        b = get_batch()
+
+        hello_output_path = str(self.expected_outputs(sequencing_group).get('hello', ''))
+        job_say_hi = say_hi(b, sequencing_group, hello_output_path)
+
+        jobs = [job_say_hi]
 
         return self.make_outputs(
             sequencing_group,

@@ -1,5 +1,6 @@
 [workflow]
-show_workflow = true
+show_workflow = false
+dry_run = false
 dataset = 'fewgenomes'
 
 # Note: for fewgenomes and sandbox mentioning datasets by name is not a security risk
@@ -17,10 +18,11 @@ force_stages = [
     'CumulativeCalc',
     'FilterEvens',
     'BuildAPrimePyramid',
+    'SayHi'
 ]
 
 # first_stages = ['CumulativeCalc']
-# last_stages = ['FilterEvens']
+# last_stages = ['SayHi']
 
 status_reporter = 'metamist'
 
