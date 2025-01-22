@@ -54,7 +54,7 @@ By combining rigorous testing capabilities with a standardised development frame
 * The `jobs` and `stages` are defined in separate files:
   * The `cpg_flow_test/jobs/` directory contains the job definitions that can be reused across stages.
   * The `cpg_flow_test/stages.py` file contains the stage definitions, which call the jobs.
-* The `cpg_flow_test/workflow.py` file contains the test workflow definition.
+* The `cpg_flow_test/main.py` file contains the test workflow definition and is the pipeline entry-point.
 
 ## How To Use
 

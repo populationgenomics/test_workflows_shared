@@ -82,7 +82,7 @@ echo "analysis-runner
   --access-level "test"
   --output-dir "cpg-flow_test"
   --config "config.toml"
-  workflow.py"
+  main.py"
 
 analysis-runner \
   --image "$IMAGE_PATH" \
@@ -91,4 +91,4 @@ analysis-runner \
   --access-level "test" \
   --output-dir "cpg-flow_test" \
   --config "config.toml" \
-  workflow.py
+  main.py
