@@ -82,6 +82,7 @@ echo "analysis-runner
   --access-level "test"
   --output-dir "cpg-flow_test"
   --config "config.toml"
+  --skip-repo-checkout
   workflow.py"
 
 analysis-runner \
@@ -91,4 +92,5 @@ analysis-runner \
   --access-level "test" \
   --output-dir "cpg-flow_test" \
   --config "config.toml" \
+  --skip-repo-checkout \
   workflow.py
