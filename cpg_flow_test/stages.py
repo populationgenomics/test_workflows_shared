@@ -206,12 +206,11 @@ class ParsePyramid(MultiCohortStage):
 
         expected_output = self.expected_outputs(multicohort)
 
-        input_file = inputs.as_str(multicohort, BuildAPrimePyramid, 'pyramid')
-        input_local = get_batch().read_input(input_file)
+        input_file = get_batch().read_input(str(inputs.as_path(multicohort, BuildAPrimePyramid, 'pyramid')))
 
         # new python job
         job = get_batch().new_python_job(name=f'parse_pyramid_{multicohort.name}')
-        result = job.call(parse_pyramid_job, input_local)
+        result = job.call(parse_pyramid_job, input_file)
 
         get_batch().write_output(result.as_str(), str(expected_output))
 
