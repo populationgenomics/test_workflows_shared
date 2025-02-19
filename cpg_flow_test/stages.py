@@ -6,7 +6,8 @@ from cpg_flow.targets.multicohort import MultiCohort
 from cpg_flow.targets.sequencing_group import SequencingGroup
 from cpg_utils import Path
 from cpg_utils.hail_batch import get_batch
-from jobs import build_pyramid, cumulative_calc, filter_evens, first_n_primes, iterative_digit_sum, say_hi
+from jobs import build_pyramid, cumulative_calc, filter_evens, first_n_primes, iterative_digit_sum, say_hi, parse_pyramid_job
+from jobs.parse_pyramid import parse_pyramid_job
 
 """
 Here's a fun programming task with four interdependent steps, using the concept of **prime numbers** and their relationships:
@@ -193,3 +194,24 @@ class BuildAPrimePyramid(MultiCohortStage):
             data=self.expected_outputs(multicohort),
             jobs=job_pyramid,
         )
+
+
+@stage(required_stages=[BuildAPrimePyramid])
+class ParsePyramid(MultiCohortStage):
+
+    def expected_outputs(self, multicohort: MultiCohort) -> Path:
+        return self.prefix / f'{multicohort.name}_parsed.txt'
+
+    def queue_jobs(self, multicohort: MultiCohort, inputs: StageInput) -> StageOutput | None:
+
+        expected_output = self.expected_outputs(multicohort)
+
+        input_file = get_batch().read_input(inputs.as_str(multicohort, BuildAPrimePyramid, 'pyramid'))
+
+        # new python job
+        job = get_batch().new_python_job(name=f'parse_pyramid_{multicohort.name}')
+        result = job.call(parse_pyramid_job, input_file)
+
+        get_batch().write_output(result.as_str(), str(expected_output))
+
+        return self.make_outputs(multicohort, data=expected_output, jobs=job)
