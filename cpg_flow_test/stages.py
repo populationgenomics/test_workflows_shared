@@ -200,7 +200,7 @@ class BuildAPrimePyramid(MultiCohortStage):
 class ParsePyramid(MultiCohortStage):
 
     def expected_outputs(self, multicohort: MultiCohort) -> Path:
-        return self.prefix() / f'{multicohort.name}_parsed.txt'
+        return self.prefix / f'{multicohort.name}_parsed.txt'
 
     def queue_jobs(self, multicohort: MultiCohort, inputs: StageInput) -> StageOutput | None:
 
