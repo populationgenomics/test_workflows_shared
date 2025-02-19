@@ -6,7 +6,7 @@ from cpg_flow.targets.multicohort import MultiCohort
 from cpg_flow.targets.sequencing_group import SequencingGroup
 from cpg_utils import Path
 from cpg_utils.hail_batch import get_batch
-from jobs import build_pyramid, cumulative_calc, filter_evens, first_n_primes, iterative_digit_sum, say_hi
+from jobs import build_pyramid, cumulative_calc, filter_evens, first_n_primes, iterative_digit_sum, say_hi, parse_pyramid_job
 from jobs.parse_pyramid import parse_pyramid_job
 
 """
@@ -206,7 +206,7 @@ class ParsePyramid(MultiCohortStage):
 
         expected_output = self.expected_outputs(multicohort)
 
-        input_file = get_batch().read_input(str(inputs.as_path(multicohort, BuildAPrimePyramid, 'pyramid')))
+        input_file = get_batch().read_input(inputs.as_str(multicohort, BuildAPrimePyramid, 'pyramid'))
 
         # new python job
         job = get_batch().new_python_job(name=f'parse_pyramid_{multicohort.name}')
