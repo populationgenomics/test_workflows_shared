@@ -1,6 +1,6 @@
 [workflow]
-show_workflow = false
-dry_run = false
+show_workflow = true
+dry_run = true
 dataset = 'fewgenomes'
 
 # Note: for fewgenomes and sandbox mentioning datasets by name is not a security risk
