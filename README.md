@@ -42,13 +42,13 @@ Beyond its primary focus on testing, the repository promotes standardization thr
 
 - Enforcement of consistent naming conventions aligned with CPG standards.
 - Automated package and dependency updates using Renovate.
-- Dependency management facilitated by uv.
+- Dependency management facilitated by setuptools and pip-tools.
 
 By combining rigorous testing capabilities with a standardised development framework, tests_workflows_shared ensures high-quality pipeline development and fosters a cohesive developer experience.
 
 ## Key Features
 
-* Uses `uv` to manage dependencies
+* Uses `pyproject.toml` to manage dependencies
 * Uses `renovate` for package upgrades
 * Uses `analysis-runner` to run the test workflow
 * The `jobs` and `stages` are defined in separate files:
@@ -96,12 +96,22 @@ If the job is successfully created, the analysis-runner output will include a jo
 To enable syntax highlighting in your IDE, you will need to install dependencies.
 
 ```bash
-# Install dependencies
-# `uv` documentation: https://docs.astral.sh/uv/
-$ uv sync
-
-# Activate the virtual environment
+# Create a virtual environment - method of your choice - and source in
+# make sure the version of python available in your virtualenv satisfyies the
+# requirement in the pyproject.toml requires-python attribute
 $ source .venv/bin/activate
+
+# Then install the dev and/or main dependencies as shown
+$ pip install -r requirements.txt
+$ pip install -r requirements-dev.txt
+
+# Running the following make commands does the same
+$ make install      # pip install -r requirements.txt
+$ make install-dev  # pip install -r requirements-dev.txt
+$ make install0all  # ^run both of the above
+
+# To compile dependencies run
+$ make compile
 ```
 
 ## Related
