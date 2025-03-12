@@ -177,3 +177,4 @@ pyrightconfig.json
 
 .vscode/
 analysis-runner-config.toml
+.python-version

@@ -10,17 +10,23 @@ dependencies = [
     "hail>=0.2.133",
 ]
 
-[tool.uv]
-dev-dependencies = [
+[project.optional-dependencies]
+dev = [
     "black>=24.10.0",
     "pip-audit>=2.7.3",
     "pre-commit>=4.0.1",
+    "pip-tools>=7.4.1",
 ]
-
-[tool.uv.sources]
 
 [project.urls]
 Repository = "https://github.com/populationgenomics/test_workflows_shared"
+
+[build-system]
+requires = ["setuptools>=65.5.1", "wheel"]  # DoS risk pre 65.5.1
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["cpg_flow_test"]
 
 [tool.ruff]
 line-length = 120
