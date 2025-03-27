@@ -11,8 +11,13 @@ DATASET="fewgenomes"
 DRY_RUN=0
 SKIP_ARG=0
 
-for arg in "$@"; do
-  if SKIP_ARG=1; then
+ARGS=("$@")
+
+for i in "${!ARGS[@]}"; do
+  arg="${ARGS[$i]}"
+  arg2="${ARGS[$i+1]}"
+
+  if [ $SKIP_ARG -eq 1 ]; then
     SKIP_ARG=0
     continue
   fi
@@ -38,14 +43,15 @@ for arg in "$@"; do
     echo "Using image path (img:tag): $IMAGE_PATH"
     SKIP_ARG=1
   elif [[ "$arg" == "--config" ]]; then
-    CONFIG_PATH="$2"
+    CONFIG_PATH="$arg2"
     echo "Using config file: $CONFIG_PATH"
     SKIP_ARG=1
   elif [[ "$arg" == "--dataset" ]]; then
-    DATASET="$2"
+    DATASET="$arg2"
     echo "Using dataset: $DATASET"
     SKIP_ARG=1
   elif [[ "$arg" == "--dry-run" ]]; then
+    echo "Dry run enabled"
     DRY_RUN=1
   else
     RED=$(tput setaf 1)
@@ -109,11 +115,11 @@ fi
 
 echo "Executing the analysis-runner command..."
 
-analysis-runner \
-  --image "$IMAGE_PATH" \
-  --dataset "$DATASET" \
-  --description "cpg-flow_test" \
-  --access-level "test" \
-  --output-dir "cpg-flow_test" \
-  --config "$CONFIG_PATH" \
-  workflow.py
+# analysis-runner \
+#   --image "$IMAGE_PATH" \
+#   --dataset "$DATASET" \
+#   --description "cpg-flow_test" \
+#   --access-level "test" \
+#   --output-dir "cpg-flow_test" \
+#   --config "$CONFIG_PATH" \
+#   workflow.py
