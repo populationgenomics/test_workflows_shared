@@ -102,6 +102,11 @@ echo "analysis-runner
   --config "$CONFIG_PATH"
   workflow.py"
 
+if [ $DRY_RUN -eq 1 ]; then
+  echo "Dry run complete. Exiting..."
+  exit 0
+fi
+
 echo "Executing the analysis-runner command..."
 
 analysis-runner \
