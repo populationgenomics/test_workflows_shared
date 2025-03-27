@@ -115,11 +115,11 @@ fi
 
 echo "Executing the analysis-runner command..."
 
-# analysis-runner \
-#   --image "$IMAGE_PATH" \
-#   --dataset "$DATASET" \
-#   --description "cpg-flow_test" \
-#   --access-level "test" \
-#   --output-dir "cpg-flow_test" \
-#   --config "$CONFIG_PATH" \
-#   workflow.py
+analysis-runner \
+  --image "$IMAGE_PATH" \
+  --dataset "$DATASET" \
+  --description "cpg-flow_test" \
+  --access-level "test" \
+  --output-dir "cpg-flow_test" \
+  --config "$CONFIG_PATH" \
+  workflow.py
