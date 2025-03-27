@@ -100,7 +100,7 @@ else
 fi
 
 echo "analysis-runner
-  --config "$CONFIG_PATH"
+  --image "$IMAGE_PATH"
   --dataset "$DATASET"
   --description "cpg-flow_test"
   --access-level "test"

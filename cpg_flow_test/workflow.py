@@ -8,7 +8,7 @@ from cpg_utils.config import set_config_paths
 from stages import BuildAPrimePyramid, CumulativeCalc, FilterEvens, GeneratePrimes, SayHi
 
 TMP_DIR = os.getenv('TMP_DIR')
-CONFIG_FILE = str(Path(__file__).parent / 'config.toml')
+# CONFIG_FILE = str(Path(__file__).parent / 'config.toml')
 
 message = "Hello, Hail Batch! I'm CPG flow, nice to meet you."
 
@@ -17,9 +17,11 @@ def run_cpg_flow(dry_run=False):
     workflow = [GeneratePrimes, CumulativeCalc, FilterEvens, BuildAPrimePyramid, SayHi]
 
     config_paths = os.environ['CPG_CONFIG_PATH'].split(',')
+    print(f'CPG_CONFIG_PATHS: {config_paths}')
 
     # Inserting after the "defaults" config, but before user configs:
-    set_config_paths(config_paths[:1] + [CONFIG_FILE] + config_paths[1:])
+    # set_config_paths(config_paths[:1] + [CONFIG_FILE] + config_paths[1:])
+    set_config_paths(config_paths)
     run_workflow(stages=workflow, dry_run=dry_run)
 
 
