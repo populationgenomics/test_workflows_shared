@@ -84,7 +84,7 @@ if [[ -n $(git diff) ]]; then
 fi
 
 # Check that the docker image can be pulled
-if which docker; then
+if which docker >/dev/null; then
   if docker manifest inspect "$IMAGE_PATH" > /dev/null 2>&1; then
     echo "Docker image $IMAGE_PATH exists."
   else
