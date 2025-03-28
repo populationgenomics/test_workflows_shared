@@ -24,7 +24,7 @@ for i in "${!ARGS[@]}"; do
 
   if [[ "$arg" == "--image" ]]; then
     PATH_OVERRIDE=1
-    IMAGE_PATH=$2
+    IMAGE_PATH=$arg2
 
     # Make sure the image tag is of the format <image>:<tag>
     if [[ ! $IMAGE_PATH =~ ^[^:]+:[^:]+$ ]]; then
