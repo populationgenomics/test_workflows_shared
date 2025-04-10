@@ -1,6 +1,7 @@
 from cpg_flow.targets.sequencing_group import SequencingGroup
 from hailtop.batch import Batch
 from hailtop.batch.job import Job
+from loguru import logger
 
 
 def cumulative_calc(
@@ -26,8 +27,8 @@ def cumulative_calc(
 
     job.command(cmd)
 
-    print('-----PRINT CUMULATIVE-----')
-    print(output_file_path)
+    logger.info('-----PRINT CUMULATIVE-----')
+    logger.info(output_file_path)
     b.write_output(job.cumulative, output_file_path)
 
     return job

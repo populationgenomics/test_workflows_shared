@@ -1,5 +1,7 @@
 from typing import Any  # noqa: I001
 
+from loguru import logger
+
 from cpg_flow.stage import CohortStage, MultiCohortStage, SequencingGroupStage, StageInput, StageOutput, stage
 from cpg_flow.targets.cohort import Cohort
 from cpg_flow.targets.multicohort import MultiCohort
@@ -62,8 +64,8 @@ class GeneratePrimes(SequencingGroupStage):
         b = get_batch()
 
         # Print out alignment input for this sequencing group
-        print('-----ALIGNMENT INPUT-----')
-        print(sequencing_group.alignment_input)
+        logger.info('-----ALIGNMENT INPUT-----')
+        logger.info(sequencing_group.alignment_input)
 
         # Write id_sum to output file
         id_sum_output_path = str(self.expected_outputs(sequencing_group).get('id_sum', ''))
@@ -141,8 +143,6 @@ class FilterEvens(CohortStage):
         no_evens_output_path = str(sg_outputs['no_evens'])
         job_no_evens = filter_evens(
             b,
-            inputs,
-            CumulativeCalc,
             cohort.get_sequencing_groups(),
             input_files,
             sg_outputs,
@@ -165,12 +165,12 @@ class BuildAPrimePyramid(MultiCohortStage):
 
     def queue_jobs(self, multicohort: MultiCohort, inputs: StageInput) -> StageOutput | None:
         input_files_filter_evens = inputs.as_dict_by_target(FilterEvens)
-        print('----INPUT FILES FILTER EVENS----')
-        print(input_files_filter_evens)
+        logger.info('----INPUT FILES FILTER EVENS----')
+        logger.info(input_files_filter_evens)
 
         input_files_generate_primes = inputs.as_dict_by_target(GeneratePrimes)
-        print('----INPUT FILES GENERATE PRIMES----')
-        print(input_files_generate_primes)
+        logger.info('----INPUT FILES GENERATE PRIMES----')
+        logger.info(input_files_generate_primes)
 
         input_files: dict[str, dict[str, Any]] = {}
         for cohort in multicohort.get_cohorts():
@@ -180,8 +180,8 @@ class BuildAPrimePyramid(MultiCohortStage):
                 input_files[sg.id]['id_sum'] = input_files_generate_primes[sg.id]['id_sum']
                 input_files[sg.id]['primes'] = input_files_generate_primes[sg.id]['primes']
 
-        print('----INPUT FILES----')
-        print(input_files)
+        logger.info('----INPUT FILES----')
+        logger.info(input_files)
 
         b = get_batch()
 

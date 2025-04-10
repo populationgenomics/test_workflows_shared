@@ -3,6 +3,7 @@ from typing import Any
 from cpg_flow.targets.sequencing_group import SequencingGroup
 from hailtop.batch import Batch
 from hailtop.batch.job import Job
+from loguru import logger
 
 
 def build_pyramid(
@@ -55,8 +56,8 @@ def build_pyramid(
     job.command(f'cat {inputs} >> {job.pyramid}')
     b.write_output(job.pyramid, output_file_path)
 
-    print('-----PRINT PYRAMID-----')
-    print(output_file_path)
+    logger.info('-----PRINT PYRAMID-----')
+    logger.info(output_file_path)
 
     all_jobs = [job, *sg_jobs]
 
