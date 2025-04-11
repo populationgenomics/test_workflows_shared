@@ -1,6 +1,7 @@
 from cpg_flow.targets.sequencing_group import SequencingGroup
 from hailtop.batch import Batch
 from hailtop.batch.job import Job
+from loguru import logger
 
 
 def iterative_digit_sum(
@@ -50,8 +51,8 @@ def iterative_digit_sum(
     """
     job.command(cmd)
 
-    print('-----PRINT ID_SUM-----')
-    print(output_file_path)
+    logger.info('-----PRINT ID_SUM-----')
+    logger.info(output_file_path)
     b.write_output(job.id_sum, output_file_path)
 
     return job

@@ -1,6 +1,7 @@
 from cpg_flow.targets.sequencing_group import SequencingGroup
 from hailtop.batch import Batch
 from hailtop.batch.job import Job
+from loguru import logger
 
 
 def say_hi(
@@ -17,8 +18,8 @@ def say_hi(
 
     job.command(cmd)
 
-    print('-----PRINT SAY HI-----')
-    print(output_file_path)
+    logger.info('-----PRINT SAY HI-----')
+    logger.info(output_file_path)
     b.write_output(job.sayhi, output_file_path)
 
     return job

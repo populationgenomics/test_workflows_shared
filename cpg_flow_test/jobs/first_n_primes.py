@@ -1,6 +1,7 @@
 from cpg_flow.targets.sequencing_group import SequencingGroup
 from hailtop.batch import Batch
 from hailtop.batch.job import Job
+from loguru import logger
 
 
 def first_n_primes(
@@ -44,8 +45,8 @@ def first_n_primes(
 
     job.command(cmd)
 
-    print('-----PRINT PRIMES-----')
-    print(output_file_path)
+    logger.info('-----PRINT PRIMES-----')
+    logger.info(output_file_path)
     b.write_output(job.primes, output_file_path)
 
     return job
