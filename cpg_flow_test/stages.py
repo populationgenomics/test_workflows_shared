@@ -136,6 +136,10 @@ class FilterEvens(CohortStage):
         return sg_outputs
 
     def queue_jobs(self, cohort: Cohort, inputs: StageInput) -> StageOutput | None:
+        print('Running Vivians test, where are we!')
+        print(cohort.prefix())
+        print(cohort.prefix(unique_for_multicohort=True))
+        print('here we are')
         input_files = inputs.as_dict_by_target(CumulativeCalc)
         b = get_batch()
 
