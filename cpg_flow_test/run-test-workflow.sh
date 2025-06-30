@@ -1,7 +1,8 @@
 #!/bin/bash
 
 DEFAULT_IMAGE_REPOSITORY="australia-southeast1-docker.pkg.dev/cpg-common/images"
-IMAGE_TAG="cpg_flow:0.1.3"
+DEFAULT_IMAGE_TAG="$DEFAULT_IMAGE_TAG"
+IMAGE_TAG="$DEFAULT_IMAGE_TAG"
 IMAGE_PATH="$DEFAULT_IMAGE_REPOSITORY/$IMAGE_TAG"
 
 PATH_OVERRIDE=0
@@ -16,6 +17,18 @@ ARGS=("$@")
 for i in "${!ARGS[@]}"; do
   arg="${ARGS[$i]}"
   arg2="${ARGS[$i+1]}"
+
+  if [[ "$arg" == "--help" ]]; then
+    echo "Usage: $0 [--image <image_repo_url>:<tag>] [--config <config_file_path>] [--dataset <dataset_name>] [--dry-run] [--help]"
+    echo ""
+    echo "Options:"
+    echo "  --image <image_repo_url>:<tag>   Specify the Docker image and tag to use"
+    echo "  --config <config_file_path>      Specify the config file path"
+    echo "  --dataset <dataset_name>         Specify the dataset name"
+    echo "  --dry-run                        Show the command that would be run, but do not execute"
+    echo "  --help                           Show this help message and exit"
+    exit 0
+  fi
 
   if [ $SKIP_ARG -eq 1 ]; then
     SKIP_ARG=0
@@ -35,7 +48,7 @@ for i in "${!ARGS[@]}"; do
       echo "e.g"
       GREEN=$(tput setaf 2)
       YELLOW=$(tput setaf 3)
-      echo "${GREEN}$0 --image \"cpg_flow:0.1.3\"${RESET}"
+      echo "${GREEN}$0 --image \"$DEFAULT_IMAGE_TAG\"${RESET}"
       echo "Valid tags can be found from the most recent ${YELLOW}cpg-flow${RESET} docker deployment runs on Github:"
       echo "${YELLOW}https://github.com/populationgenomics/cpg-flow/actions/workflows/docker.yaml${RESET}"
       exit 1
@@ -60,7 +73,7 @@ for i in "${!ARGS[@]}"; do
     echo "Usage: $0 [--image <image_repo_url>:<tag>] [--config <config_file_path>] [--dataset <dataset_name>] [--dry-run]"
     echo "e.g"
     GREEN=$(tput setaf 2)
-    echo "${GREEN}$0 --image-tag \"cpg_flow:0.1.1\" --config \"custom_config.toml\" --dataset \"test-umbrella\" --dry-run${RESET}"
+    echo "${GREEN}$0 --image-tag \"$DEFAULT_IMAGE_TAG\" --config \"custom_config.toml\" --dataset \"test-umbrella\" --dry-run${RESET}"
     exit 1
   fi
 done
