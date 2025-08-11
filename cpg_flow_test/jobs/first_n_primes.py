@@ -5,7 +5,11 @@ from loguru import logger
 
 
 def first_n_primes(
-    b: Batch, sequencing_group: SequencingGroup, input_file_path: str, output_file_path: str, depends_on: Job,
+    b: Batch,
+    sequencing_group: SequencingGroup,
+    input_file_path: str,
+    output_file_path: str,
+    depends_on: Job,
 ) -> list[Job]:
     title = f'First N Primes: {sequencing_group.id}'
     job = b.new_job(name=title)

@@ -73,7 +73,13 @@ class GeneratePrimes(SequencingGroupStage):
 
         # Generate first N primes
         primes_output_path = str(self.expected_outputs(sequencing_group).get('primes', ''))
-        job_primes = first_n_primes(b, sequencing_group, id_sum_output_path, primes_output_path, depends_on=job_id_sum)
+        job_primes = first_n_primes(
+            b,
+            sequencing_group,
+            id_sum_output_path,
+            primes_output_path,
+            depends_on=job_id_sum,
+        )
 
         jobs = [job_id_sum, job_primes]
 
@@ -92,7 +98,12 @@ class CumulativeCalc(SequencingGroupStage):
         b = get_batch()
 
         cumulative_calc_output_path = str(self.expected_outputs(sequencing_group).get('cumulative', ''))
-        job_cumulative_calc = cumulative_calc(b, sequencing_group, input_txt, cumulative_calc_output_path)
+        job_cumulative_calc = cumulative_calc(
+            b,
+            sequencing_group,
+            input_txt,
+            cumulative_calc_output_path,
+        )
 
         jobs = [job_cumulative_calc]
 
@@ -186,7 +197,12 @@ class BuildAPrimePyramid(MultiCohortStage):
         b = get_batch()
 
         pyramid_output_path = str(self.expected_outputs(multicohort).get('pyramid', ''))
-        job_pyramid = build_pyramid(b, multicohort.get_sequencing_groups(), input_files, pyramid_output_path)
+        job_pyramid = build_pyramid(
+            b,
+            multicohort.get_sequencing_groups(),
+            input_files,
+            pyramid_output_path,
+        )
 
         return self.make_outputs(
             multicohort,
