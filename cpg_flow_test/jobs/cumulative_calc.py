@@ -8,10 +8,11 @@ def cumulative_calc(
     b: Batch,
     sequencing_group: SequencingGroup,
     input_file_path: str,
+    job_attrs: dict[str, str],
     output_file_path: str,
 ) -> list[Job]:
     title = f'Cumulative Calc: {sequencing_group.id}'
-    job = b.new_job(name=title)
+    job = b.new_job(name=title, attributes=job_attrs)
     primes_path = b.read_input(input_file_path)
 
     cmd = f"""

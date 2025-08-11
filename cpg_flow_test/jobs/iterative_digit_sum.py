@@ -7,10 +7,11 @@ from loguru import logger
 def iterative_digit_sum(
     b: Batch,
     sequencing_group: SequencingGroup,
+    job_attrs: dict[str, str],
     output_file_path: str,
 ) -> list[Job]:
     title = f'Iterative Digit Sum: {sequencing_group.id}'
-    job = b.new_job(name=title)
+    job = b.new_job(name=title, attributes=job_attrs)
 
     cmd = f"""\
         #!/bin/bash
