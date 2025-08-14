@@ -11,6 +11,7 @@ def filter_evens(
     b: Batch,
     sequencing_groups: list[SequencingGroup],
     input_files: dict[str, dict[str, Any]],
+    job_attrs: dict[str, str],
     sg_outputs: dict[str, dict[str, Any]],
     output_file_path: str,
 ) -> list[Job]:
@@ -20,7 +21,7 @@ def filter_evens(
     sg_jobs = []
     sg_output_files = []
     for sg in sequencing_groups:  # type: ignore
-        job = b.new_job(name=title + ': ' + sg.id)
+        job = b.new_job(name=title + ': ' + sg.id, attributes=job_attrs)
         input_file_path = input_files[sg.id]['cumulative']
         no_evens_input_file = b.read_input(input_file_path)
         no_evens_output_file_path = str(sg_outputs[sg.id])
@@ -42,7 +43,7 @@ def filter_evens(
         sg_jobs.append(job)
 
     # Merge the no evens lists for all sequencing groups into a single file
-    job = b.new_job(name=title)
+    job = b.new_job(name=title, attributes=job_attrs)
     job.depends_on(*sg_jobs)
     inputs = ' '.join([b.read_input(f) for f in sg_output_files])
     job.command(f'cat {inputs} >> {job.no_evens_file}')

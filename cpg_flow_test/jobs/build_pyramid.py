@@ -10,6 +10,7 @@ def build_pyramid(
     b: Batch,
     sequencing_groups: list[SequencingGroup],
     input_files: dict[str, Any],
+    job_attrs: dict[str, str],
     output_file_path: str,
 ) -> list[Job]:
     title = 'Build A Pyramid'
@@ -17,7 +18,7 @@ def build_pyramid(
     sg_jobs = []
     sg_output_files = []
     for sg in sequencing_groups:  # type: ignore
-        job = b.new_job(name=title + ': ' + sg.id)
+        job = b.new_job(name=title + ': ' + sg.id, attributes=job_attrs | {'sequencing_group': sg.id})
         no_evens_input_file_path = input_files[sg.id]['no_evens']
         no_evens_input_file = b.read_input(no_evens_input_file_path)
 
@@ -50,7 +51,7 @@ def build_pyramid(
         sg_jobs.append(job)
 
     # Merge the no evens lists for all sequencing groups into a single file
-    job = b.new_job(name=title)
+    job = b.new_job(name=title, attributes=job_attrs | {'tool': 'cat'})
     job.depends_on(*sg_jobs)
     inputs = ' '.join([b.read_input(f) for f in sg_output_files])
     job.command(f'cat {inputs} >> {job.pyramid}')

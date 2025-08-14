@@ -5,10 +5,15 @@ from loguru import logger
 
 
 def first_n_primes(
-    b: Batch, sequencing_group: SequencingGroup, input_file_path: str, output_file_path: str, depends_on: Job,
+    b: Batch,
+    sequencing_group: SequencingGroup,
+    input_file_path: str,
+    job_attrs: dict[str, str],
+    output_file_path: str,
+    depends_on: Job,
 ) -> list[Job]:
     title = f'First N Primes: {sequencing_group.id}'
-    job = b.new_job(name=title)
+    job = b.new_job(name=title, attributes=job_attrs)
     id_sum_path = b.read_input(input_file_path)
 
     if depends_on:
