@@ -59,22 +59,18 @@ class GeneratePrimes(SequencingGroupStage):
             'primes': sequencing_group.dataset.prefix() / WORKFLOW_FOLDER / f'{sequencing_group.id}_primes.txt',
         }
 
-    def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput | None:
-        # Get batch
-        b = get_batch()
-
+    def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput:
         # Print out alignment input for this sequencing group
         logger.info('-----ALIGNMENT INPUT-----')
         logger.info(sequencing_group.alignment_input)
 
         # Write id_sum to output file
         id_sum_output_path = str(self.expected_outputs(sequencing_group).get('id_sum', ''))
-        job_id_sum = iterative_digit_sum(b, sequencing_group, self.get_job_attrs(sequencing_group), id_sum_output_path)
+        job_id_sum = iterative_digit_sum.iterative_digit_sum_job(sequencing_group, self.get_job_attrs(sequencing_group), id_sum_output_path)
 
         # Generate first N primes
         primes_output_path = str(self.expected_outputs(sequencing_group).get('primes', ''))
-        job_primes = first_n_primes(
-            b,
+        job_primes = first_n_primes.first_n_primes_job(
             sequencing_group,
             id_sum_output_path,
             self.get_job_attrs(sequencing_group),
@@ -94,13 +90,11 @@ class CumulativeCalc(SequencingGroupStage):
             'cumulative': sequencing_group.dataset.prefix() / WORKFLOW_FOLDER / f'{sequencing_group.id}_cumulative.txt',
         }
 
-    def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput | None:
+    def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput:
         input_txt = inputs.as_path(sequencing_group, GeneratePrimes, 'primes')
-        b = get_batch()
 
         cumulative_calc_output_path = str(self.expected_outputs(sequencing_group).get('cumulative', ''))
-        job_cumulative_calc = cumulative_calc(
-            b,
+        job_cumulative_calc = cumulative_calc.cumulative_calc_job(
             sequencing_group,
             input_txt,
             self.get_job_attrs(sequencing_group),
@@ -123,11 +117,13 @@ class SayHi(SequencingGroupStage):
             'hello': sequencing_group.dataset.prefix() / WORKFLOW_FOLDER / f'{sequencing_group.id}_cumulative.txt',
         }
 
-    def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput | None:
-        b = get_batch()
-
+    def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput:
         hello_output_path = str(self.expected_outputs(sequencing_group).get('hello', ''))
-        job_say_hi = say_hi(b, sequencing_group, self.get_job_attrs(sequencing_group), hello_output_path)
+        job_say_hi = say_hi.say_hi_job(
+            sequencing_group,
+            self.get_job_attrs(sequencing_group),
+            hello_output_path,
+        )
 
         jobs = [job_say_hi]
 
@@ -148,14 +144,12 @@ class FilterEvens(CohortStage):
         sg_outputs['no_evens'] = cohort.dataset.prefix() / WORKFLOW_FOLDER / f'{cohort.name}_no_evens.txt'
         return sg_outputs
 
-    def queue_jobs(self, cohort: Cohort, inputs: StageInput) -> StageOutput | None:
+    def queue_jobs(self, cohort: Cohort, inputs: StageInput) -> StageOutput:
         input_files = inputs.as_dict_by_target(CumulativeCalc)
-        b = get_batch()
 
         sg_outputs = self.expected_outputs(cohort)
         no_evens_output_path = str(sg_outputs['no_evens'])
-        job_no_evens = filter_evens(
-            b,
+        job_no_evens = filter_evens.filter_evens_job(
             cohort.get_sequencing_groups(),
             input_files,
             self.get_job_attrs(cohort),
@@ -177,7 +171,7 @@ class BuildAPrimePyramid(MultiCohortStage):
             'pyramid': multicohort.analysis_dataset.prefix() / WORKFLOW_FOLDER / f'{multicohort.name}_pyramid.txt',
         }
 
-    def queue_jobs(self, multicohort: MultiCohort, inputs: StageInput) -> StageOutput | None:
+    def queue_jobs(self, multicohort: MultiCohort, inputs: StageInput) -> StageOutput:
         input_files_filter_evens = inputs.as_dict_by_target(FilterEvens)
         logger.info('----INPUT FILES FILTER EVENS----')
         logger.info(input_files_filter_evens)
@@ -197,11 +191,8 @@ class BuildAPrimePyramid(MultiCohortStage):
         logger.info('----INPUT FILES----')
         logger.info(input_files)
 
-        b = get_batch()
-
         pyramid_output_path = str(self.expected_outputs(multicohort).get('pyramid', ''))
-        job_pyramid = build_pyramid(
-            b,
+        job_pyramid = build_pyramid.build_pyramid_job(
             multicohort.get_sequencing_groups(),
             input_files,
             self.get_job_attrs(multicohort),

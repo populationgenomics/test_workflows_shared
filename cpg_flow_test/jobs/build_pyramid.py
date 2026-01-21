@@ -1,24 +1,27 @@
 from typing import Any
 
 from cpg_flow.targets.sequencing_group import SequencingGroup
+from cpg_utils.config import config_retrieve
+from cpg_utils.hail_batch import get_batch
 from hailtop.batch import Batch
 from hailtop.batch.job import Job
 from loguru import logger
 
 
-def build_pyramid(
-    b: Batch,
+def build_pyramid_job(
     sequencing_groups: list[SequencingGroup],
     input_files: dict[str, Any],
     job_attrs: dict[str, str],
     output_file_path: str,
 ) -> list[Job]:
+    b = get_batch()
     title = 'Build A Pyramid'
     # Compute the no evens list for each sequencing group
     sg_jobs = []
     sg_output_files = []
     for sg in sequencing_groups:  # type: ignore
         job = b.new_job(name=title + ': ' + sg.id, attributes=job_attrs | {'sequencing_group': sg.id})
+        job.image(config_retrieve['workflow', 'driver_image'])
         no_evens_input_file_path = input_files[sg.id]['no_evens']
         no_evens_input_file = b.read_input(no_evens_input_file_path)
 
@@ -52,6 +55,7 @@ def build_pyramid(
 
     # Merge the no evens lists for all sequencing groups into a single file
     job = b.new_job(name=title, attributes=job_attrs | {'tool': 'cat'})
+    job.image(config_retrieve['workflow', 'driver_image'])
     job.depends_on(*sg_jobs)
     inputs = ' '.join([b.read_input(f) for f in sg_output_files])
     job.command(f'cat {inputs} >> {job.pyramid}')
