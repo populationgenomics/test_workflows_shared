@@ -14,7 +14,6 @@ def filter_evens_job(
     sg_outputs: dict[str, dict[str, Any]],
     output_file_path: str,
 ) -> list[Job]:
-
     b = get_batch()
     title = 'Filter Evens'
 

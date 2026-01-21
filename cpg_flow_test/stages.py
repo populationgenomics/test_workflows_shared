@@ -52,7 +52,7 @@ WORKFLOW_FOLDER = 'prime_pyramid'
 
 @stage(analysis_keys=['id_sum', 'primes'], analysis_type='custom')
 class GeneratePrimes(SequencingGroupStage):
-    def expected_outputs(self, sequencing_group: SequencingGroup) -> dict[str, Path | str]:
+    def expected_outputs(self, sequencing_group: SequencingGroup) -> dict[str, Path]:
         return {
             'id_sum': sequencing_group.dataset.prefix() / WORKFLOW_FOLDER / f'{sequencing_group.id}_id_sum.txt',
             'primes': sequencing_group.dataset.prefix() / WORKFLOW_FOLDER / f'{sequencing_group.id}_primes.txt',
@@ -65,7 +65,11 @@ class GeneratePrimes(SequencingGroupStage):
 
         # Write id_sum to output file
         id_sum_output_path = str(self.expected_outputs(sequencing_group).get('id_sum', ''))
-        job_id_sum = iterative_digit_sum.iterative_digit_sum_job(sequencing_group, self.get_job_attrs(sequencing_group), id_sum_output_path)
+        job_id_sum = iterative_digit_sum.iterative_digit_sum_job(
+            sequencing_group,
+            self.get_job_attrs(sequencing_group),
+            id_sum_output_path,
+        )
 
         # Generate first N primes
         primes_output_path = str(self.expected_outputs(sequencing_group).get('primes', ''))
@@ -84,7 +88,7 @@ class GeneratePrimes(SequencingGroupStage):
 
 @stage(required_stages=[GeneratePrimes], analysis_keys=['cumulative'], analysis_type='custom')
 class CumulativeCalc(SequencingGroupStage):
-    def expected_outputs(self, sequencing_group: SequencingGroup):
+    def expected_outputs(self, sequencing_group: SequencingGroup) -> dict[str, Path]:
         return {
             'cumulative': sequencing_group.dataset.prefix() / WORKFLOW_FOLDER / f'{sequencing_group.id}_cumulative.txt',
         }
@@ -124,18 +128,16 @@ class SayHi(SequencingGroupStage):
             hello_output_path,
         )
 
-        jobs = [job_say_hi]
-
         return self.make_outputs(
             sequencing_group,
             data=self.expected_outputs(sequencing_group),
-            jobs=jobs,
+            jobs=job_say_hi,
         )
 
 
 @stage(required_stages=[CumulativeCalc], analysis_keys=['no_evens'], analysis_type='custom')
 class FilterEvens(CohortStage):
-    def expected_outputs(self, cohort: Cohort):
+    def expected_outputs(self, cohort: Cohort) -> dict[str, Path]:
         sg_outputs = {
             sg.id: str(sg.dataset.prefix() / WORKFLOW_FOLDER / f'{sg.id}_no_evens.txt')
             for sg in cohort.get_sequencing_groups()
@@ -165,7 +167,7 @@ class FilterEvens(CohortStage):
 
 @stage(required_stages=[GeneratePrimes, FilterEvens], analysis_keys=['pyramid'], analysis_type='custom')
 class BuildAPrimePyramid(MultiCohortStage):
-    def expected_outputs(self, multicohort: MultiCohort):
+    def expected_outputs(self, multicohort: MultiCohort) -> dict[str, Path]:
         return {
             'pyramid': multicohort.analysis_dataset.prefix() / WORKFLOW_FOLDER / f'{multicohort.name}_pyramid.txt',
         }
