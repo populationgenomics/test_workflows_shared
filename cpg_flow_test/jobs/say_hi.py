@@ -14,7 +14,7 @@ def say_hi_job(
     b = get_batch()
     title = f'Say Hi: {sequencing_group.id}'
     job = b.new_job(name=title, attributes=job_attrs)
-    job.image(config_retrieve['workflow', 'driver_image'])
+    job.image(config_retrieve(['workflow', 'driver_image']))
 
     cmd = f"""
     echo "This is a hello from sequencing_group {sequencing_group.id}" > {job.sayhi}

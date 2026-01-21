@@ -15,7 +15,7 @@ def cumulative_calc_job(
     b = get_batch()
     title = f'Cumulative Calc: {sequencing_group.id}'
     job = b.new_job(name=title, attributes=job_attrs)
-    job.image(config_retrieve['workflow', 'driver_image'])
+    job.image(config_retrieve(['workflow', 'driver_image']))
     primes_path = b.read_input(input_file_path)
 
     cmd = f"""

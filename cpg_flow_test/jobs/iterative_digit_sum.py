@@ -14,7 +14,7 @@ def iterative_digit_sum_job(
     b = get_batch()
     title = f'Iterative Digit Sum: {sequencing_group.id}'
     job = b.new_job(name=title, attributes=job_attrs)
-    job.image(config_retrieve['workflow', 'driver_image'])
+    job.image(config_retrieve(['workflow', 'driver_image']))
 
     cmd = f"""\
         #!/bin/bash

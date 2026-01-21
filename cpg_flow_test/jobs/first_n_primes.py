@@ -16,7 +16,7 @@ def first_n_primes_job(
     b = get_batch()
     title = f'First N Primes: {sequencing_group.id}'
     job = b.new_job(name=title, attributes=job_attrs)
-    job.image(config_retrieve['workflow', 'driver_image'])
+    job.image(config_retrieve(['workflow', 'driver_image']))
     id_sum_path = b.read_input(input_file_path)
 
     if depends_on:

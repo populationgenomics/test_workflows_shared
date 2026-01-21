@@ -25,7 +25,7 @@ def filter_evens_job(
     sg_output_files = []
     for sg in sequencing_groups:  # type: ignore
         job = b.new_job(name=title + ': ' + sg.id, attributes=job_attrs)
-        job.image(config_retrieve['workflow', 'driver_image'])
+        job.image(config_retrieve(['workflow', 'driver_image']))
         input_file_path = input_files[sg.id]['cumulative']
         no_evens_input_file = b.read_input(input_file_path)
         no_evens_output_file_path = str(sg_outputs[sg.id])
@@ -48,7 +48,7 @@ def filter_evens_job(
 
     # Merge the no evens lists for all sequencing groups into a single file
     job = b.new_job(name=title, attributes=job_attrs)
-    job.image(config_retrieve['workflow', 'driver_image'])
+    job.image(config_retrieve(['workflow', 'driver_image']))
     job.depends_on(*sg_jobs)
     inputs = ' '.join([b.read_input(f) for f in sg_output_files])
     job.command(f'cat {inputs} >> {job.no_evens_file}')
