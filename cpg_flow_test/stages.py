@@ -7,21 +7,29 @@ from cpg_flow.targets.cohort import Cohort
 from cpg_flow.targets.multicohort import MultiCohort
 from cpg_flow.targets.sequencing_group import SequencingGroup
 from cpg_utils import Path
-from jobs import build_pyramid, cumulative_calc, filter_evens, first_n_primes, iterative_digit_sum, say_hi
+from test_workflows_shared.jobs import (
+    build_pyramid,
+    cumulative_calc,
+    filter_evens,
+    first_n_primes,
+    iterative_digit_sum,
+    say_hi,
+)
 
 r"""
-Here's a fun programming task with four interdependent steps, using the concept of **prime numbers** and their relationships:
+Here's a fun programming task with four interdependent steps, using **prime numbers** and their relationships:
 
 ---
 
 ### Task: Prime Pyramid
-Write a program that builds a "Prime Pyramid" based on a given input number \( N \). The pyramid is built in four steps:
+Write a program that builds a "Prime Pyramid" based on a given input number. The pyramid is built in four steps:
 
 #### Step 1: **Generate Prime Numbers**
-Write a function to generate the first \( N \) prime numbers. For example, if \( N = 5 \), the output would be `[2, 3, 5, 7, 11]`.
+Write a function to generate the first `N` prime numbers, i.e. if `N = 5`, the output would be `[2, 3, 5, 7, 11]`.
 
 #### Step 2: **Calculate Cumulative Sums**
-Using the prime numbers generated in Step 1, calculate a list of cumulative sums. Each cumulative sum is the sum of the primes up to that index.
+Using the prime numbers generated in Step 1, calculate a list of cumulative sums.
+Each cumulative sum is the sum of the primes up to that index.
 Example: For `[2, 3, 5, 7, 11]`, the cumulative sums are `[2, 5, 10, 17, 28]`.
 
 #### Step 3: **Filter Even Numbers**
@@ -29,7 +37,8 @@ From the cumulative sums generated in Step 2, filter out the even numbers.
 Example: For `[2, 5, 10, 17, 28]`, the result is `[5, 17]`.
 
 #### Step 4: **Build the Prime Pyramid**
-Using the filtered numbers from Step 3, construct a pyramid. Each level of the pyramid corresponds to a filtered number, and the number determines how many stars `*` appear on that level.
+Using the filtered numbers from Step 3, construct a pyramid.
+Each pyramid level corresponds to a filtered number, and the number determines how many stars `*` appear on that level.
 Example: For `[5, 17]`, the pyramid is:
 ```
 *****
@@ -58,7 +67,7 @@ class GeneratePrimes(SequencingGroupStage):
             'primes': sequencing_group.dataset.prefix() / WORKFLOW_FOLDER / f'{sequencing_group.id}_primes.txt',
         }
 
-    def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput:
+    def queue_jobs(self, sequencing_group: SequencingGroup, _inputs: StageInput) -> StageOutput:
         # Print out alignment input for this sequencing group
         logger.info('-----ALIGNMENT INPUT-----')
         logger.info(sequencing_group.alignment_input)
@@ -120,7 +129,7 @@ class SayHi(SequencingGroupStage):
             'hello': sequencing_group.dataset.prefix() / WORKFLOW_FOLDER / f'{sequencing_group.id}_cumulative.txt',
         }
 
-    def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput:
+    def queue_jobs(self, sequencing_group: SequencingGroup, _inputs: StageInput) -> StageOutput:
         hello_output_path = str(self.expected_outputs(sequencing_group).get('hello', ''))
         job_say_hi = say_hi.say_hi_job(
             sequencing_group,
