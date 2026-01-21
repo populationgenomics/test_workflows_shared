@@ -22,7 +22,7 @@ def run_cpg_flow(dry_run=False):
     # Inserting after the "defaults" config, but before user configs:
     # set_config_paths(config_paths[:1] + [CONFIG_FILE] + config_paths[1:])
     set_config_paths(config_paths)
-    run_workflow(stages=workflow, dry_run=dry_run)
+    run_workflow(name='test_workflows_shared', stages=workflow, dry_run=dry_run)
 
 
 def validate_batch_workflow():
