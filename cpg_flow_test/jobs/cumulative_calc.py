@@ -1,8 +1,10 @@
+from loguru import logger
+
+from hailtop.batch.job import Job
+
 from cpg_flow.targets.sequencing_group import SequencingGroup
 from cpg_utils.config import config_retrieve
 from cpg_utils.hail_batch import get_batch
-from hailtop.batch.job import Job
-from loguru import logger
 
 
 def cumulative_calc_job(
