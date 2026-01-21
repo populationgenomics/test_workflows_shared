@@ -3,7 +3,6 @@ from typing import Any
 from cpg_flow.targets.sequencing_group import SequencingGroup
 from cpg_utils.config import config_retrieve
 from cpg_utils.hail_batch import get_batch
-from hailtop.batch import Batch
 from hailtop.batch.job import Job
 from loguru import logger
 
@@ -19,7 +18,7 @@ def build_pyramid_job(
     # Compute the no evens list for each sequencing group
     sg_jobs = []
     sg_output_files = []
-    for sg in sequencing_groups:  # type: ignore
+    for sg in sequencing_groups:
         job = b.new_job(name=title + ': ' + sg.id, attributes=job_attrs | {'sequencing_group': sg.id})
         job.image(config_retrieve(['workflow', 'driver_image']))
         no_evens_input_file_path = input_files[sg.id]['no_evens']
@@ -64,6 +63,4 @@ def build_pyramid_job(
     logger.info('-----PRINT PYRAMID-----')
     logger.info(output_file_path)
 
-    all_jobs = [job, *sg_jobs]
-
-    return all_jobs
+    return [job, *sg_jobs]

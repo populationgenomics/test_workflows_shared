@@ -1,10 +1,8 @@
 from typing import Any
 
-from cpg_flow.stage import Stage, StageInput
 from cpg_flow.targets.sequencing_group import SequencingGroup
 from cpg_utils.config import config_retrieve
 from cpg_utils.hail_batch import get_batch
-from hailtop.batch import Batch
 from hailtop.batch.job import Job
 from loguru import logger
 
@@ -23,7 +21,7 @@ def filter_evens_job(
     # Compute the no evens list for each sequencing group
     sg_jobs = []
     sg_output_files = []
-    for sg in sequencing_groups:  # type: ignore
+    for sg in sequencing_groups:
         job = b.new_job(name=title + ': ' + sg.id, attributes=job_attrs)
         job.image(config_retrieve(['workflow', 'driver_image']))
         input_file_path = input_files[sg.id]['cumulative']
@@ -57,6 +55,4 @@ def filter_evens_job(
     logger.info('-----PRINT NO EVENS-----')
     logger.info(output_file_path)
 
-    all_jobs = [job, *sg_jobs]
-
-    return all_jobs
+    return [job, *sg_jobs]
