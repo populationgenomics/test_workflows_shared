@@ -1,5 +1,3 @@
-from typing import Any
-
 from loguru import logger
 
 from hailtop.batch.job import Job

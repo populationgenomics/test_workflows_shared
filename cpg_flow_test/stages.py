@@ -15,7 +15,7 @@ Here's a fun programming task with four steps, using the concept of **prime numb
 ---
 
 ### Task: Prime Pyramid
-Write a program that builds a "Prime Pyramid" based on a given input number \( N \). The pyramid is built in four steps:
+Write a program that builds a "Prime Pyramid" based on a given input number `N`. The pyramid is built in four steps:
 
 #### Step 1: **Generate Prime Numbers**
 Write a function to generate the first `N` prime numbers. i.e. if `N=5``, the output would be `[2, 3, 5, 7, 11]`.
@@ -60,7 +60,7 @@ class GeneratePrimes(SequencingGroupStage):
             'primes': sequencing_group.dataset.prefix() / WORKFLOW_FOLDER / f'{sequencing_group.id}_primes.txt',
         }
 
-    def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput:
+    def queue_jobs(self, sequencing_group: SequencingGroup, _inputs: StageInput) -> StageOutput:
         # Print out alignment input for this sequencing group
         logger.info('-----ALIGNMENT INPUT-----')
         logger.info(sequencing_group.alignment_input)
@@ -75,13 +75,13 @@ class GeneratePrimes(SequencingGroupStage):
         )
 
         # Generate first N primes
-        primes_output_path = str(self.expected_outputs(sequencing_group).get('primes', ''))
         job_primes = first_n_primes.first_n_primes_job(
             sequencing_group,
             outputs['id_sum'],
             self.get_job_attrs(sequencing_group),
             outputs['primes'],
         )
+
         # set a dependency
         job_primes.depends_on(job_id_sum)
 
@@ -122,7 +122,7 @@ class SayHi(SequencingGroupStage):
             'hello': sequencing_group.dataset.prefix() / WORKFLOW_FOLDER / f'{sequencing_group.id}_cumulative.txt',
         }
 
-    def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput | None:
+    def queue_jobs(self, sequencing_group: SequencingGroup, _inputs: StageInput) -> StageOutput | None:
         outputs = self.expected_outputs(sequencing_group)
         return self.make_outputs(
             sequencing_group,
