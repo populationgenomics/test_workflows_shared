@@ -1,33 +1,36 @@
 from typing import Any
 
-from cpg_flow.targets.sequencing_group import SequencingGroup
-from hailtop.batch import Batch
-from hailtop.batch.job import Job
 from loguru import logger
 
+from hailtop.batch import Batch
+from hailtop.batch.job import Job
 
-def build_pyramid(
-    b: Batch,
+from cpg_flow.targets.sequencing_group import SequencingGroup
+from cpg_utils import Path, hail_batch
+
+
+def build_pyramid_job(
     sequencing_groups: list[SequencingGroup],
     input_files: dict[str, Any],
     job_attrs: dict[str, str],
-    output_file_path: str,
+    output_file_path: Path,
 ) -> list[Job]:
+    b = hail_batch.get_batch()
+
     title = 'Build A Pyramid'
     # Compute the no evens list for each sequencing group
-    sg_jobs = []
-    sg_output_files = []
-    for sg in sequencing_groups:  # type: ignore
-        job = b.new_job(name=title + ': ' + sg.id, attributes=job_attrs | {'sequencing_group': sg.id})
-        no_evens_input_file_path = input_files[sg.id]['no_evens']
-        no_evens_input_file = b.read_input(no_evens_input_file_path)
+    sg_jobs: list[Job] = []
+    sg_output_files: list[Path] = []
+    for sg in sequencing_groups:
+        job = b.new_bash_job(name=title + ': ' + sg.id, attributes=job_attrs | {'sequencing_group': sg.id})
 
-        id_sum_input_file_path = input_files[sg.id]['id_sum']
-        id_sum_input_file = b.read_input(id_sum_input_file_path)
+        no_evens_input_file = b.read_input(input_files[sg.id]['no_evens'])
 
-        pyramid_output_file_path = str(sg.dataset.prefix() / f'{sg.id}_pyramid.txt')
+        id_sum_input_file = b.read_input(input_files[sg.id]['id_sum'])
+
+        pyramid_output_file_path = sg.dataset.prefix() / f'{sg.id}_pyramid.txt'
         sg_output_files.append(pyramid_output_file_path)
-        cmd = f"""
+        job.command(f"""
             pyramid=()
             max_row_size=$(cat {no_evens_input_file} | rev | cut -d' ' -f1 | rev)
             rows=($(cat {no_evens_input_file} | cut -d' ' -f2-))
@@ -44,14 +47,13 @@ def build_pyramid(
             done
 
             printf "%s\\n" "${{pyramid[@]}}" > {job.pyramid_file}
-        """
+        """)
 
-        job.command(cmd)
         b.write_output(job.pyramid_file, pyramid_output_file_path)
         sg_jobs.append(job)
 
     # Merge the no evens lists for all sequencing groups into a single file
-    job = b.new_job(name=title, attributes=job_attrs | {'tool': 'cat'})
+    job = b.new_bash_job(name=title, attributes=job_attrs | {'tool': 'cat'})
     job.depends_on(*sg_jobs)
     inputs = ' '.join([b.read_input(f) for f in sg_output_files])
     job.command(f'cat {inputs} >> {job.pyramid}')
@@ -60,6 +62,4 @@ def build_pyramid(
     logger.info('-----PRINT PYRAMID-----')
     logger.info(output_file_path)
 
-    all_jobs = [job, *sg_jobs]
-
-    return all_jobs
+    return [job, *sg_jobs]
