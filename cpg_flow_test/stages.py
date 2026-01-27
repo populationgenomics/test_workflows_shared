@@ -137,6 +137,68 @@ class SayHi(SequencingGroupStage):
             jobs=jobs,
         )
 
+@stage(required_stages=[SayHi], analysis_keys=['hello_b'], analysis_type='custom')
+class SayHiB(SequencingGroupStage):
+    def expected_outputs(self, sequencing_group: SequencingGroup):
+        return {
+            'hello_b': sequencing_group.dataset.prefix() / WORKFLOW_FOLDER / f'{sequencing_group.id}_cumulative.txt',
+        }
+
+    def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput | None:
+        b = get_batch()
+
+        hello_output_path = str(self.expected_outputs(sequencing_group).get('hello_b', ''))
+        job_say_hi = say_hi(b, sequencing_group, self.get_job_attrs(sequencing_group), hello_output_path)
+
+        jobs = [job_say_hi]
+
+        return self.make_outputs(
+            sequencing_group,
+            data=self.expected_outputs(sequencing_group),
+            jobs=jobs,
+        )
+
+@stage(required_stages=[SayHiB], analysis_keys=['hello_c'], analysis_type='custom')
+class SayHiC(SequencingGroupStage):
+    def expected_outputs(self, sequencing_group: SequencingGroup):
+        return {
+            'hello_c': sequencing_group.dataset.prefix() / WORKFLOW_FOLDER / f'{sequencing_group.id}_cumulative.txt',
+        }
+
+    def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput | None:
+        b = get_batch()
+
+        hello_output_path = str(self.expected_outputs(sequencing_group).get('hello_c', ''))
+        job_say_hi = say_hi(b, sequencing_group, self.get_job_attrs(sequencing_group), hello_output_path)
+
+        jobs = [job_say_hi]
+
+        return self.make_outputs(
+            sequencing_group,
+            data=self.expected_outputs(sequencing_group),
+            jobs=jobs,
+        )
+
+@stage(required_stages=[SayHiC], analysis_keys=['hello_d'], analysis_type='custom')
+class SayHiD(SequencingGroupStage):
+    def expected_outputs(self, sequencing_group: SequencingGroup):
+        return {
+            'hello_d': sequencing_group.dataset.prefix() / WORKFLOW_FOLDER / f'{sequencing_group.id}_cumulative.txt',
+        }
+
+    def queue_jobs(self, sequencing_group: SequencingGroup, inputs: StageInput) -> StageOutput | None:
+        b = get_batch()
+
+        hello_output_path = str(self.expected_outputs(sequencing_group).get('hello_d', ''))
+        job_say_hi = say_hi(b, sequencing_group, self.get_job_attrs(sequencing_group), hello_output_path)
+
+        jobs = [job_say_hi]
+
+        return self.make_outputs(
+            sequencing_group,
+            data=self.expected_outputs(sequencing_group),
+            jobs=jobs,
+        )
 
 @stage(required_stages=[CumulativeCalc], analysis_keys=['no_evens'], analysis_type='custom')
 class FilterEvens(CohortStage):
