@@ -22,7 +22,7 @@ force_stages = [
 ]
 
 # first_stages = ['CumulativeCalc']
-# last_stages = ['SayHi']
+last_stages = ['CumulativeCalc','FilterEvens']
 
 status_reporter = 'metamist'
 
