@@ -77,16 +77,15 @@ select = [
     "YTT",
 ]
 
+fixable = ["ALL"]
+
+ignore = [
+    "Q000",    # Single quotes found but double quotes preferred
+]
+
 [tool.ruff.lint.isort]
 section-order = ["future", "standard-library", "third-party", "hail", "cpg", "first-party", "local-folder"]
 
 [tool.ruff.lint.isort.sections]
 cpg = ["metamist", "cpg_flow", "cpg_utils"]
 hail = ["hail", "hailtop"]
-
-
-fixable = ["ALL"]
-
-ignore = [
-    "Q000",    # Single quotes found but double quotes preferred
-]
