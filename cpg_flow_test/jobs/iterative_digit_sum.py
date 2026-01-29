@@ -1,19 +1,21 @@
-from cpg_flow.targets.sequencing_group import SequencingGroup
-from hailtop.batch import Batch
-from hailtop.batch.job import Job
 from loguru import logger
 
+from hailtop.batch.job import Job
 
-def iterative_digit_sum(
-    b: Batch,
+from cpg_flow.targets.sequencing_group import SequencingGroup
+from cpg_utils import Path, config, hail_batch
+
+
+def iterative_digit_sum_job(
     sequencing_group: SequencingGroup,
     job_attrs: dict[str, str],
-    output_file_path: str,
-) -> list[Job]:
-    title = f'Iterative Digit Sum: {sequencing_group.id}'
-    job = b.new_job(name=title, attributes=job_attrs)
+    output_file_path: Path,
+) -> Job:
+    b = hail_batch.get_batch()
+    job = b.new_job(name=f'Iterative Digit Sum: {sequencing_group.id}', attributes=job_attrs)
+    job.image(config.config_retrieve(['images', 'ubuntu']))
 
-    cmd = f"""\
+    job.command(f"""\
         #!/bin/bash
 
         # Function to calculate the iterative digit sum
@@ -49,8 +51,7 @@ def iterative_digit_sum(
         result=$(extract_digits_and_sum {sequencing_group.id})
         echo "Result: $result\n"
         echo $result > {job.id_sum}
-    """
-    job.command(cmd)
+    """)
 
     logger.info('-----PRINT ID_SUM-----')
     logger.info(output_file_path)
