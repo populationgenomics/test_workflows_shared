@@ -3,7 +3,7 @@ from loguru import logger
 from hailtop.batch.job import Job
 
 from cpg_flow.targets.sequencing_group import SequencingGroup
-from cpg_utils import Path, hail_batch
+from cpg_utils import Path, config, hail_batch
 
 
 def say_hi_job(
@@ -13,6 +13,7 @@ def say_hi_job(
 ) -> Job:
     b = hail_batch.get_batch()
     job = b.new_job(name=f'Say Hi: {sequencing_group.id}', attributes=job_attrs)
+    job.image(config.config_retrieve(['images', 'ubuntu']))
 
     job.command(f"""
     echo "This is a hello from sequencing_group {sequencing_group.id}" > {job.sayhi}

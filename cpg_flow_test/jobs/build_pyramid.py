@@ -5,7 +5,7 @@ from loguru import logger
 from hailtop.batch.job import Job
 
 from cpg_flow.targets.sequencing_group import SequencingGroup
-from cpg_utils import Path, hail_batch
+from cpg_utils import Path, config, hail_batch
 
 
 def build_pyramid_job(
@@ -22,6 +22,7 @@ def build_pyramid_job(
     sg_output_files: list[Path] = []
     for sg in sequencing_groups:
         job = b.new_bash_job(name=title + ': ' + sg.id, attributes=job_attrs | {'sequencing_group': sg.id})
+        job.image(config.config_retrieve(['images', 'ubuntu']))
 
         no_evens_input_file = b.read_input(input_files[sg.id]['no_evens'])
 
@@ -53,6 +54,7 @@ def build_pyramid_job(
 
     # Merge the no evens lists for all sequencing groups into a single file
     job = b.new_bash_job(name=title, attributes=job_attrs | {'tool': 'cat'})
+    job.image(config.config_retrieve(['images', 'ubuntu']))
     job.depends_on(*sg_jobs)
     inputs = ' '.join([b.read_input(f) for f in sg_output_files])
     job.command(f'cat {inputs} >> {job.pyramid}')

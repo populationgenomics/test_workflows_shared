@@ -107,3 +107,6 @@ sequencing_type = 'genome'
 
 [resource_overrides]
 # Override the default resources for a stage.
+
+[images]
+ubuntu = 'australia-southeast1-docker.pkg.dev/cpg-common/images/sv/ubuntu1804:latest'
