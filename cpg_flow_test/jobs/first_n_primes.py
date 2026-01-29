@@ -3,7 +3,7 @@ from loguru import logger
 from hailtop.batch.job import Job
 
 from cpg_flow.targets.sequencing_group import SequencingGroup
-from cpg_utils import Path, hail_batch
+from cpg_utils import Path, config, hail_batch
 
 
 def first_n_primes_job(
@@ -14,6 +14,7 @@ def first_n_primes_job(
 ) -> Job:
     b = hail_batch.get_batch()
     job = b.new_job(name=f'First N Primes: {sequencing_group.id}', attributes=job_attrs)
+    job.image(config.config_retrieve(['images', 'ubuntu']))
     id_sum_path = b.read_input(input_file_path)
 
     job.command(f"""
