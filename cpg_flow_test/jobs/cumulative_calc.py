@@ -1,18 +1,20 @@
-from cpg_flow.targets.sequencing_group import SequencingGroup
-from hailtop.batch import Batch
-from hailtop.batch.job import Job
 from loguru import logger
 
+from hailtop.batch.job import Job
 
-def cumulative_calc(
-    b: Batch,
+from cpg_flow.targets.sequencing_group import SequencingGroup
+from cpg_utils import Path, config, hail_batch
+
+
+def cumulative_calc_job(
     sequencing_group: SequencingGroup,
-    input_file_path: str,
+    input_file_path: Path,
     job_attrs: dict[str, str],
-    output_file_path: str,
+    output_file_path: Path,
 ) -> list[Job]:
-    title = f'Cumulative Calc: {sequencing_group.id}'
-    job = b.new_job(name=title, attributes=job_attrs)
+    b = hail_batch.get_batch()
+    job = b.new_job(name=f'Cumulative Calc: {sequencing_group.id}', attributes=job_attrs)
+    job.image(config.config_retrieve(['images', 'ubuntu']))
     primes_path = b.read_input(input_file_path)
 
     cmd = f"""
