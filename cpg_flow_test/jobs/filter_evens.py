@@ -3,6 +3,7 @@ from loguru import logger
 from hailtop.batch.job import Job
 
 from cpg_flow.targets.sequencing_group import SequencingGroup
+from cpg_flow.utils import dependency_handler
 from cpg_utils import Path, config, hail_batch
 
 
@@ -16,7 +17,7 @@ def filter_evens_job(
     title = 'Filter Evens'
 
     # Compute the no evens list for each sequencing group
-    sg_jobs = []
+    all_jobs = []
     sg_output_files = []
     for sg in sequencing_groups:
         job = b.new_bash_job(name=f'{title}: {sg.id}', attributes=job_attrs)
@@ -36,13 +37,14 @@ def filter_evens_job(
         """)
 
         b.write_output(job.sg_no_evens_file, sg_outputs[sg.id])
-        sg_jobs.append(job)
+        all_jobs.append(job)
 
     # Merge the no evens lists for all sequencing groups into a single file
     job = b.new_bash_job(name=title, attributes=job_attrs)
     job.image(config.config_retrieve(['images', 'ubuntu']))
 
-    job.depends_on(*sg_jobs)
+    dependency_handler(job, all_jobs)
+
     inputs = ' '.join([b.read_input(f) for f in sg_output_files])
     job.command(f'cat {inputs} >> {job.no_evens_file}')
     b.write_output(job.no_evens_file, sg_outputs['no_evens'])
@@ -50,4 +52,4 @@ def filter_evens_job(
     logger.info('-----PRINT NO EVENS-----')
     logger.info(sg_outputs['no_evens'])
 
-    return [job, *sg_jobs]
+    return all_jobs

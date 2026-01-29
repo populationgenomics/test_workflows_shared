@@ -4,9 +4,7 @@ from jobs import build_pyramid, cumulative_calc, filter_evens, first_n_primes, i
 from loguru import logger
 
 from cpg_flow.stage import CohortStage, MultiCohortStage, SequencingGroupStage, StageInput, StageOutput, stage
-from cpg_flow.targets.cohort import Cohort
-from cpg_flow.targets.multicohort import MultiCohort
-from cpg_flow.targets.sequencing_group import SequencingGroup
+from cpg_flow.targets import Cohort, MultiCohort, SequencingGroup
 from cpg_utils import Path
 
 """
@@ -82,7 +80,6 @@ class GeneratePrimes(SequencingGroupStage):
             outputs['primes'],
         )
 
-        # set a dependency
         job_primes.depends_on(job_id_sum)
 
         jobs = [job_id_sum, job_primes]

@@ -11,13 +11,14 @@ def cumulative_calc_job(
     input_file_path: Path,
     job_attrs: dict[str, str],
     output_file_path: Path,
-) -> list[Job]:
+) -> Job:
     b = hail_batch.get_batch()
     job = b.new_job(name=f'Cumulative Calc: {sequencing_group.id}', attributes=job_attrs)
     job.image(config.config_retrieve(['images', 'ubuntu']))
+
     primes_path = b.read_input(input_file_path)
 
-    cmd = f"""
+    job.command(f"""
     primes=($(cat {primes_path}))
     csum=0
     cumulative=()
@@ -26,9 +27,7 @@ def cumulative_calc_job(
         cumulative+=("$csum")
     done
     echo "${{cumulative[@]}}" > {job.cumulative}
-    """
-
-    job.command(cmd)
+    """)
 
     logger.info('-----PRINT CUMULATIVE-----')
     logger.info(output_file_path)

@@ -5,6 +5,7 @@ from loguru import logger
 from hailtop.batch.job import Job
 
 from cpg_flow.targets.sequencing_group import SequencingGroup
+from cpg_flow.utils import dependency_handler
 from cpg_utils import Path, config, hail_batch
 
 
@@ -18,7 +19,7 @@ def build_pyramid_job(
 
     title = 'Build A Pyramid'
     # Compute the no evens list for each sequencing group
-    sg_jobs: list[Job] = []
+    all_jobs: list[Job] = []
     sg_output_files: list[Path] = []
     for sg in sequencing_groups:
         job = b.new_bash_job(name=title + ': ' + sg.id, attributes=job_attrs | {'sequencing_group': sg.id})
@@ -50,12 +51,15 @@ def build_pyramid_job(
         """)
 
         b.write_output(job.pyramid_file, pyramid_output_file_path)
-        sg_jobs.append(job)
+        all_jobs.append(job)
 
     # Merge the no evens lists for all sequencing groups into a single file
     job = b.new_bash_job(name=title, attributes=job_attrs | {'tool': 'cat'})
     job.image(config.config_retrieve(['images', 'ubuntu']))
-    job.depends_on(*sg_jobs)
+
+    # set and extend dependency list
+    dependency_handler(job, all_jobs, append_to_tail=True)
+
     inputs = ' '.join([b.read_input(f) for f in sg_output_files])
     job.command(f'cat {inputs} >> {job.pyramid}')
     b.write_output(job.pyramid, output_file_path)
@@ -63,4 +67,4 @@ def build_pyramid_job(
     logger.info('-----PRINT PYRAMID-----')
     logger.info(output_file_path)
 
-    return [job, *sg_jobs]
+    return all_jobs
