@@ -13,6 +13,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  #v6.0.2
+        with:
+          persist-credentials: false
 
       - uses: astral-sh/setup-uv@cec208311dfd045dd5311c1add060b2062131d57  #v8.0.0
 
@@ -23,26 +25,28 @@ jobs:
               -o sbom.cdx.json
 
       - name: Authenticate to GCP
-        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093  #v3.0.0
+        id: auth
+        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093  #v3.0.0 
         with:
           workload_identity_provider: 'projects/379228030003/locations/global/workloadIdentityPools/github/providers/github-actions'
           service_account: 'dtrack-ci@devops-tools-433123.iam.gserviceaccount.com'
-
-      - name: Get IAP identity token
-        id: iap-token
-        run: |
-          TOKEN=$(gcloud auth print-identity-token --audiences=$(gcloud auth list --filter=status:ACTIVE --format='value(account)'))
-          echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
+          token_format: 'id_token'
+          id_token_audience: '379228030003-nug7attglk5fht4gmp6v8s2b88epnmsq.apps.googleusercontent.com'
+          id_token_include_email: true
 
       - name: Upload SBOM to Dependency-Track
+        env:
+          TOKEN: ${{ steps.auth.outputs.id_token }}
+          PROJECT_NAME: ${{ github.event.repository.name }}
+          PROJECT_VERSION: ${{ github.sha }}
         run: |
           curl -sf -X PUT "https://dtrack.popgen.rocks/api/v1/bom" \
-            -H "Authorization: Bearer ${{ steps.iap-token.outputs.token }}" \
+            -H "Authorization: Bearer $TOKEN" \
             -H "X-Api-Key: ${{ secrets.DTRACK_API_KEY }}" \
             -H "Content-Type: application/json" \
             -d "{
-              \"projectName\": \"${{ github.event.repository.name }}\",
-              \"projectVersion\": \"${{ github.sha }}\",
+              \"projectName\": \"$PROJECT_NAME\",
+              \"projectVersion\": \"$PROJECT_VERSION\",
               \"autoCreate\": true,
               \"bom\": \"$(base64 -w0 sbom.cdx.json)\"
             }"
