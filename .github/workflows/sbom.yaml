@@ -37,18 +37,15 @@ jobs:
           id_token_include_email: true
 
       - name: Upload SBOM to Dependency-Track
-        env:
+        env:  
           TOKEN: ${{ steps.auth.outputs.id_token }}
           PROJECT_NAME: ${{ github.event.repository.name }}
           PROJECT_VERSION: ${{ github.sha }}
         run: |
-          curl -sf -X PUT "https://dtrack.popgen.rocks/api/v1/bom" \
-            -H "Authorization: Bearer $TOKEN" \
-            -H "X-Api-Key: ${{ secrets.DTRACK_API_KEY }}" \
-            -H "Content-Type: application/json" \
-            -d "{
-              \"projectName\": \"$PROJECT_NAME\",
-              \"projectVersion\": \"$PROJECT_VERSION\",
-              \"autoCreate\": true,
-              \"bom\": \"$(base64 -w0 sbom.cdx.json)\"
-            }"
+            curl -sf -X POST "https://dtrack.popgen.rocks/api/v1/bom" \
+              -H "Authorization: Bearer $TOKEN" \
+              -H "X-Api-Key: ${{ secrets.DTRACK_API_KEY }}" \
+              -F "projectName=$PROJECT_NAME" \
+              -F "projectVersion=$PROJECT_VERSION" \
+              -F "autoCreate=true" \
+              -F "bom=@sbom.cdx.json"
