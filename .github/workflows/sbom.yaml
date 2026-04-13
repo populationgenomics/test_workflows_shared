@@ -18,10 +18,9 @@ jobs:
 
       - name: Generate SBOM
         run: |
-          uvx cyclonedx-py requirements \
-            --input-file requirements.txt \
-            --output-format json \
-            --output-file sbom.cdx.json
+          uvx --from cyclonedx-bom cyclonedx-py requirements \
+              requirements.txt \
+              -o sbom.cdx.json
 
       - name: Authenticate to GCP
         uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093  #v3.0.0
