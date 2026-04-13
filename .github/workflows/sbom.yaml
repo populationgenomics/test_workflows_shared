@@ -20,9 +20,11 @@ jobs:
 
       - name: Generate SBOM
         run: |
-          uvx --from cyclonedx-bom cyclonedx-py requirements \
-              requirements.txt \
-              -o sbom.cdx.json
+          uv venv
+          uv pip install -r requirements.txt
+          uvx --from cyclonedx-bom cyclonedx-py environment \
+              -o sbom.cdx.json \
+              .venv/bin/python
 
       - name: Authenticate to GCP
         id: auth
