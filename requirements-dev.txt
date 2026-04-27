@@ -2,68 +2,68 @@
 #    uv pip compile --extra=dev --output-file=requirements-dev.txt pyproject.toml
 aiodns==2.0.0
     # via hail
-aiohappyeyeballs==2.6.0
+aiohappyeyeballs==2.6.1
     # via aiohttp
-aiohttp==3.13.3
+aiohttp==3.13.5
     # via
     #   gql
     #   hail
 aiosignal==1.4.0
     # via aiohttp
-analysis-runner==3.2.3
+analysis-runner==3.2.5
     # via test-workflows-shared (pyproject.toml)
-anyio==4.12.1
+anyio==4.13.0
     # via gql
 asttokens==3.0.1
     # via stack-data
 attrs==25.1.0
     # via aiohttp
-avro==1.11.3
+avro==1.12.1
     # via hail
 azure-common==1.1.28
     # via azure-mgmt-storage
-azure-core==1.32.0
+azure-core==1.39.0
     # via
     #   azure-identity
     #   azure-mgmt-core
     #   azure-storage-blob
     #   azure-storage-file-datalake
     #   msrest
-azure-identity==1.25.1
+azure-identity==1.25.3
     # via hail
-azure-mgmt-core==1.5.0
+azure-mgmt-core==1.6.0
     # via azure-mgmt-storage
 azure-mgmt-storage==20.1.0
     # via hail
-azure-storage-blob==12.25.0
+azure-storage-blob==12.28.0
     # via
     #   azure-storage-file-datalake
     #   cloudpathlib
     #   hail
-azure-storage-file-datalake==12.19.0
+azure-storage-file-datalake==12.23.0
     # via cloudpathlib
 backoff==2.2.1
     # via
     #   gql
     #   metamist
-bokeh==3.4.3
+bokeh==3.9.0
     # via hail
 boolean-py==4.0
     # via license-expression
-boto3==1.37.11
+boto3==1.42.91
     # via
     #   cloudpathlib
     #   cpg-utils
     #   hail
-botocore==1.37.11
+botocore==1.42.91
     # via
     #   boto3
     #   cpg-utils
     #   hail
     #   s3transfer
-build==1.2.2.post1
+build==1.4.3
     # via pip-tools
-cachecontrol==0.14.1
+cachecontrol==0.14.4
     # via pip-audit
 cachetools==5.5.2
     # via google-auth
@@ -75,16 +75,16 @@ cffi==1.17.1
     # via
     #   cryptography
     #   pycares
-cfgv==3.4.0
+cfgv==3.5.0
     # via pre-commit
-charset-normalizer==3.4.0
+charset-normalizer==3.4.7
     # via requests
-click==8.1.7
+click==8.3.2
     # via
     #   metamist
     #   pip-tools
     #   typer
-cloudpathlib==0.21.0
+cloudpathlib==0.23.0
     # via
     #   analysis-runner
     #   cpg-utils
@@ -92,7 +92,7 @@ comm==0.2.3
     # via ipywidgets
 commonmark==0.9.1
     # via rich
-contourpy==1.3.1
+contourpy==1.3.2
     # via bokeh
 cpg-flow==1.3.1
     # via test-workflows-shared (pyproject.toml)
@@ -116,23 +116,23 @@ decorator==4.4.2
     #   ipython
 defusedxml==0.7.1
     # via py-serializable
-deprecated==1.2.18
+deprecated==1.3.1
     # via
     #   cpg-utils
     #   hail
 dill==0.4.1
     # via hail
-distlib==0.3.9
+distlib==0.4.0
     # via virtualenv
 executing==2.2.1
     # via stack-data
-filelock==3.16.1
+filelock==3.29.0
     # via
     #   cachecontrol
     #   virtualenv
-frozendict==2.4.6
+frozendict==2.4.7
     # via cpg-utils
-frozenlist==1.5.0
+frozenlist==1.8.0
     # via
     #   aiohttp
     #   aiosignal
@@ -144,7 +144,7 @@ google-api-core==1.34.1
     #   google-cloud-secret-manager
     #   google-cloud-storage
     #   metamist
-google-auth==2.38.0
+google-auth==2.49.2
     # via
     #   cpg-utils
     #   google-api-core
@@ -159,34 +159,34 @@ google-auth-oauthlib==0.8.0
     # via
     #   cpg-utils
     #   hail
-google-cloud-artifact-registry==1.19.0
+google-cloud-artifact-registry==1.21.0
     # via cpg-utils
-google-cloud-core==2.4.3
+google-cloud-core==2.5.1
     # via google-cloud-storage
-google-cloud-secret-manager==2.23.1
+google-cloud-secret-manager==2.27.0
     # via cpg-utils
 google-cloud-storage==2.14.0
     # via cloudpathlib
-google-crc32c==1.6.0
+google-crc32c==1.8.0
     # via
     #   google-cloud-storage
     #   google-resumable-media
-google-resumable-media==2.7.2
+google-resumable-media==2.8.2
     # via google-cloud-storage
-googleapis-common-protos==1.69.1
+googleapis-common-protos==1.74.0
     # via
     #   google-api-core
     #   grpc-google-iam-v1
     #   grpcio-status
 gql==3.5.3
     # via metamist
-graphql-core==3.2.6
+graphql-core==3.2.8
     # via gql
-grpc-google-iam-v1==0.14.1
+grpc-google-iam-v1==0.14.4
     # via
     #   google-cloud-artifact-registry
     #   google-cloud-secret-manager
-grpcio==1.71.0
+grpcio==1.80.0
     # via
     #   cpg-flow
     #   google-api-core
@@ -194,7 +194,7 @@ grpcio==1.71.0
     #   googleapis-common-protos
     #   grpc-google-iam-v1
     #   grpcio-status
-grpcio-status==1.48.2
+grpcio-status==1.80.0
     # via
     #   analysis-runner
     #   cpg-flow
@@ -206,11 +206,11 @@ hail==0.2.137
     #   cpg-flow
 html5lib==1.1
     # via pip-audit
-humanize==4.12.1
+humanize==4.15.0
     # via hail
-identify==2.6.3
+identify==2.6.19
     # via pre-commit
-idna==3.10
+idna==3.11
     # via
     #   anyio
     #   requests
@@ -232,7 +232,7 @@ jedi==0.19.2
     # via ipython
 jinja2==3.1.6
     # via bokeh
-jmespath==1.0.1
+jmespath==1.1.0
     # via
     #   boto3
     #   botocore
@@ -240,27 +240,27 @@ jproperties==2.1.2
     # via hail
 jupyterlab-widgets==3.0.16
     # via ipywidgets
-license-expression==30.4.0
+license-expression==30.4.4
     # via cyclonedx-python-lib
 loguru==0.7.3
     # via cpg-flow
-markupsafe==3.0.2
+markupsafe==3.0.3
     # via jinja2
 matplotlib-inline==0.2.1
     # via ipython
-metamist==7.13.4
+metamist==7.14.0
     # via cpg-flow
-msal==1.31.1
+msal==1.36.0
     # via
     #   azure-identity
     #   msal-extensions
-msal-extensions==1.2.0
+msal-extensions==1.3.1
     # via azure-identity
-msgpack==1.1.0
+msgpack==1.1.2
     # via cachecontrol
 msrest==0.7.1
     # via azure-mgmt-storage
-multidict==6.1.0
+multidict==6.7.1
     # via
     #   aiohttp
     #   yarl
@@ -268,7 +268,7 @@ nest-asyncio==1.6.0
     # via hail
 networkx==3.6.1
     # via cpg-flow
-nodeenv==1.9.1
+nodeenv==1.10.0
     # via pre-commit
 numpy==2.4.1
     # via
@@ -277,11 +277,11 @@ numpy==2.4.1
     #   hail
     #   pandas
     #   scipy
-oauthlib==3.2.2
+oauthlib==3.3.1
     # via requests-oauthlib
-orjson==3.10.15
+orjson==3.11.8
     # via hail
-packageurl-python==0.16.0
+packageurl-python==0.17.6
     # via cyclonedx-python-lib
 packaging==24.2
     # via
@@ -294,9 +294,9 @@ pandas==2.2.3
     # via
     #   bokeh
     #   hail
-parsimonious==0.10.0
+parsimonious==0.11.0
     # via hail
-parso==0.8.5
+parso==0.8.6
     # via jedi
 pexpect==4.9.0
     # via ipython
@@ -308,13 +308,13 @@ pip==25.3
     #   pip-tools
 pip-api==0.0.34
     # via pip-audit
-pip-audit==2.7.3
+pip-audit==2.10.0
     # via test-workflows-shared (pyproject.toml)
 pip-requirements-parser==32.0.1
     # via pip-audit
-pip-tools==7.4.1
+pip-tools==7.5.3
     # via test-workflows-shared (pyproject.toml)
-platformdirs==4.3.6
+platformdirs==4.9.6
     # via virtualenv
 plotly==5.24.1
     # via
@@ -322,17 +322,17 @@ plotly==5.24.1
     #   hail
 portalocker==2.10.1
     # via msal-extensions
-pre-commit==4.0.1
+pre-commit==4.5.1
     # via
     #   test-workflows-shared (pyproject.toml)
     #   cpg-flow
 prompt-toolkit==3.0.52
     # via ipython
-propcache==0.3.0
+propcache==0.4.1
     # via
     #   aiohttp
     #   yarl
-proto-plus==1.26.1
+proto-plus==1.27.2
     # via
     #   google-cloud-artifact-registry
     #   google-cloud-secret-manager
@@ -353,24 +353,24 @@ py-serializable==1.1.2
     # via cyclonedx-python-lib
 py4j==0.10.9.7
     # via pyspark
-pyasn1==0.6.1
+pyasn1==0.6.3
     # via
     #   pyasn1-modules
     #   rsa
-pyasn1-modules==0.4.1
+pyasn1-modules==0.4.2
     # via google-auth
 pycares==4.5.0
     # via aiodns
 pycparser==2.22
     # via cffi
-pygments==2.18.0
+pygments==2.20.0
     # via
     #   ipython
     #   ipython-pygments-lexers
     #   rich
-pyjwt==2.10.1
+pyjwt==2.12.1
     # via msal
-pyparsing==3.2.0
+pyparsing==3.3.2
     # via pip-requirements-parser
 pyproject-hooks==1.2.0
     # via
@@ -387,7 +387,7 @@ python-json-logger==2.0.7
     # via hail
 pytz==2025.1
     # via pandas
-pyyaml==6.0.2
+pyyaml==6.0.3
     # via
     #   bokeh
     #   cpg-flow
@@ -395,7 +395,7 @@ pyyaml==6.0.2
     #   pre-commit
 regex==2024.11.6
     # via parsimonious
-requests==2.32.5
+requests==2.33.1
     # via
     #   analysis-runner
     #   azure-core
@@ -422,9 +422,9 @@ rich==12.6.0
     #   hail
     #   pip-audit
     #   typer
-rsa==4.9
+rsa==4.9.1
     # via google-auth
-s3transfer==0.11.4
+s3transfer==0.16.0
     # via boto3
 scipy==1.17.0
     # via hail
@@ -444,19 +444,19 @@ sortedcontainers==2.4.0
     #   hail
 stack-data==0.6.3
     # via ipython
-tabulate==0.9.0
+tabulate==0.10.0
     # via
     #   analysis-runner
     #   cpg-utils
     #   hail
     #   metamist
-tenacity==9.0.0
+tenacity==9.1.4
     # via plotly
 toml==0.10.2
     # via
     #   cpg-utils
     #   pip-audit
-tornado==6.5.4
+tornado==6.5.5
     # via
     #   bokeh
     #   cpg-flow
@@ -465,9 +465,9 @@ traitlets==5.14.3
     #   ipython
     #   ipywidgets
     #   matplotlib-inline
-typer==0.15.2
+typer==0.24.1
     # via hail
-typing-extensions==4.12.2
+typing-extensions==4.15.0
     # via
     #   aiosignal
     #   anyio
@@ -480,20 +480,20 @@ typing-extensions==4.12.2
     #   typer
 tzdata==2025.1
     # via pandas
-urllib3==2.2.3
+urllib3==2.6.3
     # via
     #   botocore
     #   metamist
     #   requests
-uvloop==0.21.0
+uvloop==0.22.1
     # via hail
 virtualenv==20.28.0
     # via pre-commit
-wcwidth==0.3.0
+wcwidth==0.6.0
     # via prompt-toolkit
 webencodings==0.5.1
     # via html5lib
-wheel==0.45.1
+wheel==0.46.3
     # via pip-tools
 widgetsnbextension==4.0.15
     # via ipywidgets
@@ -501,7 +501,7 @@ wrapt==1.17.2
     # via deprecated
 xyzservices==2025.1.0
     # via bokeh
-yarl==1.18.3
+yarl==1.23.0
     # via
     #   aiohttp
     #   gql
