@@ -51,13 +51,13 @@ jobs:
             jq -n \
               --arg name "$PROJECT_NAME" \
               --arg version "$PROJECT_VERSION" \
-              --arg bom "$(base64 -w0 sbom.cdx.json)" \
+              --rawfile bom sbom.cdx.json \
               --arg ref "$GITHUB_REF_NAME" \
               '{
                 projectName: $name,
                 projectVersion: $version,
                 autoCreate: true,
-                bom: $bom,
+                bom: ($bom | @base64),
                 projectTags: [
                   {name: "python"},
                   {name: $ref}
