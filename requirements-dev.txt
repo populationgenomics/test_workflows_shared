@@ -361,7 +361,7 @@ pure-eval==0.2.3
     # via stack-data
 py-serializable==1.1.2
     # via cyclonedx-python-lib
-py4j==0.10.9.7
+py4j==0.10.9.9
     # via pyspark
 pyasn1==0.6.1
     # via
