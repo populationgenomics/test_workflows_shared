@@ -41,7 +41,7 @@ For pipeline developers who are new to cpg_flow, this repository provides a prac
 Beyond its primary focus on testing, the repository promotes standardization through:
 
 - Enforcement of consistent naming conventions aligned with CPG standards.
-- Automated package and dependency updates using Renovate.
+- Automated package and dependency updates using Dependabot.
 - Dependency management facilitated by setuptools and pip-tools.
 
 By combining rigorous testing capabilities with a standardised development framework, tests_workflows_shared ensures high-quality pipeline development and fosters a cohesive developer experience.
@@ -49,7 +49,7 @@ By combining rigorous testing capabilities with a standardised development frame
 ## Key Features
 
 * Uses `pyproject.toml` to manage dependencies
-* Uses `renovate` for package upgrades
+* Uses `dependabot` for package upgrades
 * Uses `analysis-runner` to run the test workflow
 * The `jobs` and `stages` are defined in separate files:
   * The `cpg_flow_test/jobs/` directory contains the job definitions that can be reused across stages.
