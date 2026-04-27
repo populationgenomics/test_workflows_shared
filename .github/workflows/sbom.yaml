@@ -26,6 +26,12 @@ jobs:
               -o sbom.cdx.json \
               .venv/bin/python
 
+      - name: Read project version from pyproject.toml
+        id: project_version
+        run: |
+          VERSION=$(python3 -c "import tomllib; print(tomllib.load(open('pyproject.toml','rb'))['project']['version'])")
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
       - name: Authenticate to GCP
         id: auth
         uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093  #v3.0.0
@@ -40,7 +46,7 @@ jobs:
         env:
           TOKEN: ${{ steps.auth.outputs.id_token }}
           PROJECT_NAME: ${{ github.event.repository.name }}
-          PROJECT_VERSION: ${{ github.sha }}
+          PROJECT_VERSION: ${{ steps.project_version.outputs.version }}
         run: |
             curl -sf -X POST "https://dtrack.popgen.rocks/api/v1/bom" \
               -H "Authorization: Bearer $TOKEN" \
