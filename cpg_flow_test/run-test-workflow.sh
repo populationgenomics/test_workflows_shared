@@ -106,7 +106,7 @@ echo "analysis-runner
   --access-level "test"
   --output-dir "cpg-flow_test"
   --config "$CONFIG_PATH"
-  workflow.py"
+  python3 workflow.py"
 
 if [ $DRY_RUN -eq 1 ]; then
   echo "Dry run complete. Exiting..."
@@ -122,4 +122,4 @@ analysis-runner \
   --access-level "test" \
   --output-dir "cpg-flow_test" \
   --config "$CONFIG_PATH" \
-  workflow.py
+  python3 workflow.py
