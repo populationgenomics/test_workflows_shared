@@ -12,6 +12,7 @@ DRY_RUN=0
 SKIP_ARG=0
 
 ARGS=("$@")
+ENV_VARS=()
 
 for i in "${!ARGS[@]}"; do
   arg="${ARGS[$i]}"
@@ -53,6 +54,10 @@ for i in "${!ARGS[@]}"; do
   elif [[ "$arg" == "--dry-run" ]]; then
     echo "Dry run enabled"
     DRY_RUN=1
+  elif [[ "$arg" == "--env" ]]; then
+    echo "Passing environment variable along: $arg2"
+    ENV_VARS+=("--env $arg2")
+    SKIP_ARG=1
   else
     RED=$(tput setaf 1)
     RESET=$(tput sgr0)
@@ -99,6 +104,10 @@ else
   echo "Docker is not installed. Skipping image check."
 fi
 
+# Convert array of env vars to string for printing
+ENV_VARS_STR=$(printf "%s " "${ENV_VARS[@]}")
+echo "Environment variables to be passed: $ENV_VARS_STR"
+
 echo "analysis-runner
   --image "$IMAGE_PATH"
   --dataset "$DATASET"
@@ -106,6 +115,7 @@ echo "analysis-runner
   --access-level "test"
   --output-dir "cpg-flow_test"
   --config "$CONFIG_PATH"
+  "${ENV_VARS[@]}"
   python3 workflow.py"
 
 if [ $DRY_RUN -eq 1 ]; then
@@ -122,4 +132,5 @@ analysis-runner \
   --access-level "test" \
   --output-dir "cpg-flow_test" \
   --config "$CONFIG_PATH" \
+  ${ENV_VARS[@]} \
   python3 workflow.py
