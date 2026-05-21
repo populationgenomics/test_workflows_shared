@@ -52,7 +52,7 @@ This task is simple, yet it combines loops, conditionals, and basic data manipul
 WORKFLOW_FOLDER = 'prime_pyramid'
 
 
-@stage(analysis_keys=['id_sum', 'primes'], analysis_type='custom')
+@stage(analysis_keys=['id_sum', 'primes'], analysis_type='exome')
 class GeneratePrimes(SequencingGroupStage):
     def expected_outputs(self, sequencing_group: SequencingGroup) -> dict[str, Path]:
         return {
@@ -90,7 +90,7 @@ class GeneratePrimes(SequencingGroupStage):
         return self.make_outputs(sequencing_group, data=outputs, jobs=jobs)
 
 
-@stage(required_stages=[GeneratePrimes], analysis_keys=['cumulative'], analysis_type='custom')
+@stage(required_stages=[GeneratePrimes], analysis_keys=['cumulative'], analysis_type='exome')
 class CumulativeCalc(SequencingGroupStage):
     def expected_outputs(self, sequencing_group: SequencingGroup) -> dict[str, Path]:
         return {
@@ -115,7 +115,7 @@ class CumulativeCalc(SequencingGroupStage):
         )
 
 
-@stage(required_stages=[GeneratePrimes], analysis_keys=['hello'], analysis_type='custom')
+@stage(required_stages=[GeneratePrimes], analysis_keys=['hello'], analysis_type='exome')
 class SayHi(SequencingGroupStage):
     def expected_outputs(self, sequencing_group: SequencingGroup) -> dict[str, Path]:
         return {
@@ -131,7 +131,7 @@ class SayHi(SequencingGroupStage):
         )
 
 
-@stage(required_stages=[CumulativeCalc], analysis_keys=['no_evens'], analysis_type='custom')
+@stage(required_stages=[CumulativeCalc], analysis_keys=['no_evens'], analysis_type='exome')
 class FilterEvens(CohortStage):
     def expected_outputs(self, cohort: Cohort) -> dict[str, Path]:
         sg_outputs = {
@@ -159,7 +159,7 @@ class FilterEvens(CohortStage):
         )
 
 
-@stage(required_stages=[GeneratePrimes, FilterEvens], analysis_keys=['pyramid'], analysis_type='custom')
+@stage(required_stages=[GeneratePrimes, FilterEvens], analysis_keys=['pyramid'], analysis_type='exome')
 class BuildAPrimePyramid(MultiCohortStage):
     def expected_outputs(self, multicohort: MultiCohort) -> dict[str, Path]:
         return {
