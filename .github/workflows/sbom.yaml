@@ -1,8 +1,16 @@
+# SBOM generation + Dependency-Track upload.
+# Self-contained: works unchanged in both uv-based and pip-based projects.
+#   - uv.lock present          -> uv sync --frozen --no-dev
+#   - requirements.txt present -> uv venv + uv pip install -r requirements.txt
+#   - otherwise                -> uv venv + uv pip install . (from pyproject.toml)
+
 name: SBOM Upload
 
 on:
   push:
     branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
 
 jobs:
   sbom:
@@ -17,20 +25,40 @@ jobs:
           persist-credentials: false
 
       - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b  #v8.1.0
+        with:
+          enable-cache: false
 
-      - name: Get project version
+      - name: Install dependencies into .venv
+        run: |
+          if [ -f uv.lock ]; then
+            echo "Detected uv.lock -> uv sync --frozen --no-dev"
+            uv sync --frozen --no-dev
+          elif [ -f requirements.txt ]; then
+            echo "Detected requirements.txt -> uv pip install -r requirements.txt"
+            uv venv
+            uv pip install -r requirements.txt
+          else
+            echo "No lock/requirements file -> installing project from pyproject.toml"
+            uv venv
+            uv pip install .
+          fi
+
+      - name: Determine project version
         id: version
-        run: echo "value=$(uv version | awk '{print $2}')" >> "$GITHUB_OUTPUT"
+        run: |
+          if version=$(uv version 2>/dev/null | awk '{print $2}') && [ -n "$version" ]; then
+            echo "Version from pyproject.toml: $version"
+          else
+            version="0.0.0+${GITHUB_SHA::7}"
+            echo "No version in pyproject.toml, using $version"
+          fi
+          echo "value=$version" >> "$GITHUB_OUTPUT"
 
       - name: Generate SBOM
         run: |
-          uv venv
-          uv pip install -r requirements.txt
-          uvx --from cyclonedx-bom cyclonedx-py environment \
-              --pyproject pyproject.toml \
-              --mc-type application \
-              -o sbom.cdx.json \
-              .venv/bin/python
+          args=(environment --mc-type application -o sbom.cdx.json)
+          [ -f pyproject.toml ] && args+=(--pyproject pyproject.toml)
+          uvx --from cyclonedx-bom cyclonedx-py "${args[@]}" .venv/bin/python
 
       - name: Authenticate to GCP
         id: auth
@@ -45,26 +73,53 @@ jobs:
       - name: Upload SBOM to Dependency-Track
         env:
           TOKEN: ${{ steps.auth.outputs.id_token }}
+          DTRACK_API_KEY: ${{ secrets.DTRACK_API_KEY }}
+          DTRACK_URL: 'https://dtrack.popgen.rocks'
           PROJECT_NAME: ${{ github.event.repository.name }}
           PROJECT_VERSION: ${{ steps.version.outputs.value }}
+          # Mark main-branch and tag uploads as the "latest" project version in DT
+          IS_LATEST: ${{ github.ref_name == github.event.repository.default_branch || github.ref_type == 'tag' }}
         run: |
-            jq -n \
-              --arg name "$PROJECT_NAME" \
-              --arg version "$PROJECT_VERSION" \
-              --rawfile bom sbom.cdx.json \
-              --arg ref "$GITHUB_REF_NAME" \
-              '{
-                projectName: $name,
-                projectVersion: $version,
-                autoCreate: true,
-                bom: ($bom | @base64),
-                projectTags: [
-                  {name: "python"},
-                  {name: $ref}
-                ]
-              }' | \
-            curl -sf -X PUT "https://dtrack.popgen.rocks/api/v1/bom" \
+          # Attach to the version-less parent project (one per repo) if it
+          # exists in Dependency-Track. The portfolio's Slack alert is limited
+          # to these parents with "include active children", so attaching here
+          # is what makes new versions show up in notifications.
+          parent=""
+          if projects=$(curl -sf -G "$DTRACK_URL/api/v1/project" \
+              --data-urlencode "name=$PROJECT_NAME" \
               -H "Authorization: Bearer $TOKEN" \
-              -H "X-Api-Key: ${{ secrets.DTRACK_API_KEY }}" \
-              -H "Content-Type: application/json" \
-              -d @-
+              -H "X-Api-Key: $DTRACK_API_KEY"); then
+            if [ "$(jq '[.[] | select(.version == null)] | length' <<< "$projects")" -gt 0 ]; then
+              parent="$PROJECT_NAME"
+            fi
+          fi
+          [ -n "$parent" ] || echo "::warning::No parent project '$PROJECT_NAME' in Dependency-Track - uploading without parent (create one and add it to the Slack alert to include this repo in notifications)"
+
+          # Base64 via file + --rawfile avoids the ARG_MAX limit hit when
+          # passing large SBOMs inline via --arg.
+          base64 -w0 sbom.cdx.json > sbom.b64
+          jq -n \
+            --arg name "$PROJECT_NAME" \
+            --arg version "$PROJECT_VERSION" \
+            --rawfile bom sbom.b64 \
+            --arg ref "$GITHUB_REF_NAME" \
+            --arg parent "$parent" \
+            --argjson latest "$IS_LATEST" \
+            '{
+              projectName: $name,
+              projectVersion: $version,
+              autoCreate: true,
+              isLatest: $latest,
+              bom: $bom,
+              projectTags: [
+                {name: "python"},
+                {name: $ref}
+              ]
+            } + (if $parent != "" then {parentName: $parent} else {} end)' > payload.json
+          curl -sS --fail-with-body -X PUT "$DTRACK_URL/api/v1/bom" \
+            -H "Authorization: Bearer $TOKEN" \
+            -H "X-Api-Key: $DTRACK_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d @payload.json
+          echo
+          echo "Uploaded $PROJECT_NAME@$PROJECT_VERSION (latest=$IS_LATEST)"
