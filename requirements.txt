@@ -33,7 +33,7 @@ azure-identity==1.25.3
     # via hail
 azure-mgmt-core==1.6.0
     # via azure-mgmt-storage
-azure-mgmt-storage==24.0.1
+azure-mgmt-storage==25.1.0
     # via hail
 azure-storage-blob==12.30.0
     # via
@@ -95,7 +95,7 @@ cpg-utils==5.7.0
     #   analysis-runner
     #   cpg-flow
     #   metamist
-cryptography==46.0.6
+cryptography==50.0.1
     # via
     #   azure-identity
     #   azure-storage-blob
@@ -115,7 +115,7 @@ distlib==0.4.3
     # via virtualenv
 executing==2.2.1
     # via stack-data
-filelock==3.29.7
+filelock==4.0.1
     # via virtualenv
 frozendict==2.4.7
     # via cpg-utils
@@ -279,11 +279,11 @@ pillow==12.2.0
     # via bokeh
 platformdirs==4.10.0
     # via virtualenv
-plotly==6.6.0
+plotly==7.1.0
     # via
     #   cpg-flow
     #   hail
-portalocker==3.2.0
+portalocker==4.3.2
     # via msal-extensions
 pre-commit==4.6.0
     # via cpg-flow
@@ -368,7 +368,7 @@ requests-oauthlib==2.0.0
     #   msrest
 requests-toolbelt==1.0.0
     # via gql
-rich==14.3.3
+rich==15.0.0
     # via
     #   hail
     #   typer
