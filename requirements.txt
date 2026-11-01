@@ -257,7 +257,7 @@ numpy==2.4.1
     #   hail
     #   pandas
     #   scipy
-oauthlib==3.3.1
+oauthlib==4.0.0
     # via requests-oauthlib
 orjson==3.11.9
     # via hail
