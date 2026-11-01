@@ -353,7 +353,7 @@ py-serializable==2.1.0
     # via cyclonedx-python-lib
 py4j==0.10.9.9
     # via pyspark
-pyasn1==0.6.4
+pyasn1==0.6.5
     # via
     #   pyasn1-modules
     #   rsa
